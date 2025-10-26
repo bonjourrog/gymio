@@ -14,9 +14,6 @@ const navItems = [
 
 export default function DashboardLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     const pathName = usePathname()
-
-    console.log(pathName);
-
     const isActive = (href: string) => {
         if (href === '/dashboard') return pathName === '/dashboard'
         return pathName.startsWith(href)
@@ -28,8 +25,6 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
                 <li className={styles.logo}>GYM PRO</li>
                 {navItems.map(({ href, label, icon: Icon })=>{
                     const active = isActive(href)
-                    console.log(active);
-                    
                     return (
                         <li key={href}
                             className={`${styles['navbar__item']} ${active ? styles['navbar__item--active'] : styles['navbar__item--deactive']}`}>
