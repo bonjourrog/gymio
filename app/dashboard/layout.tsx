@@ -19,7 +19,7 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
 
     const isActive = (href: string) => {
         if (href === '/dashboard') return pathName === '/dashboard'
-        return pathName.startsWith('href')
+        return pathName.startsWith(href)
     }
 
     return <main className="flex h-screen text-zinc-700">
@@ -28,6 +28,8 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
                 <li className={styles.logo}>GYM PRO</li>
                 {navItems.map(({ href, label, icon: Icon })=>{
                     const active = isActive(href)
+                    console.log(active);
+                    
                     return (
                         <li key={href}
                             className={`${styles['navbar__item']} ${active ? styles['navbar__item--active'] : styles['navbar__item--deactive']}`}>
