@@ -40,8 +40,8 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
                 })}
             </ul>
         </nav>
-        <section className="w-full p-10">
-            <header className="flex justify-between">
+        <section className="w-full">
+            <header className="flex justify-between p-10">
                 <h1 className="text-3xl font-semibold">Dashboard</h1>
                 <div className="flex items-center gap-2 p-3 rounded-full bg-zinc-100">
                     <span className="flex items-center justify-center w-8 h-8 bg-zinc-900 text-white rounded-full text-sm font-semibold">R</span>
