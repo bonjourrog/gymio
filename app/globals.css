@@ -17,3 +17,33 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.table{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 100%;
+    padding: 2em;
+    border:.1em solid rgb(232, 232, 232);
+    border-radius: 1em;
+}
+.table hr{
+    color: #ededed;
+}
+.table>table{
+    border-collapse: collapse;
+    width: 100%;
+}
+.table th{
+    text-align: start;
+    padding: 1.5em;
+}
+.table tbody tr:hover{
+    cursor: pointer;
+    background-image:linear-gradient(to right, rgb(240, 240, 240), rgb(244, 244, 244), rgb(255, 255, 255)) ;
+    transition: all .2s ease-in-out;
+    transform: scale(1.01);
+}
+.table thead th{
+    padding: 1em 1.5em;
+}
