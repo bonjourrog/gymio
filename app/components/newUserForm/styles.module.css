@@ -1,0 +1,47 @@
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 40em;
+    height: auto;
+    /* height: 40em; */
+    padding: 2em;
+    border-radius: 2em;
+    background: #fff;
+    box-shadow: .3em .3em 1em rgba(0, 0, 0, 0.062);
+    z-index: 2;
+}
+.form input{
+    height: 3em;
+    padding: 0em .3em;
+    border-radius: .5em;
+    border: .1em solid rgb(239, 239, 239);
+    outline-width: .1em;
+    color: #3d3d3d;
+    font-weight: normal;
+}
+.form label{
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    color: rgb(52, 52, 52);
+}
+.form select{
+    height: 3em;
+    padding: 0em .5em;
+    border-radius: .5em;
+    font-weight: lighter;
+    border: .1em solid rgb(239, 239, 239);
+}
+.package{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+    border: .1em dashed #d4d2f7;
+    background: #fbfaff;
+    border-radius: .8em;
+}
+.package input{
+    border-color: #d4d2f7;
+}
