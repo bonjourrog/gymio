@@ -19,7 +19,7 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
         return pathName.startsWith(href)
     }
 
-    return <main className="flex h-screen text-zinc-700">
+    return <main className="flex max-h-screen overflow-hidden h-screen text-zinc-700">
         <input type="checkbox" id="menu-toggle" className={styles["menu-checkbox"]}/>
         <label htmlFor="menu-toggle" className={styles["menu-icon"]}>☰</label>
         <nav className={styles.navbar}>
