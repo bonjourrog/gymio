@@ -11,11 +11,11 @@ import { handlePriceFormat } from '@/app/lib/formatting';
 const NewPackageForm:FC<{setShowNewPackageForm:Dispatch<SetStateAction<boolean>>}> = ({setShowNewPackageForm}) => {
     const { addPackage, _package, setPackage:_setNewPackage, packages, setPackages } = usePackageStore();
     const [newPackage, setNewPackage] = useState<Package>({
-        name: '',
-        price: 0,
-        benefits: [],
-        duration_days: 0,
-        group_size: 1,
+        name: _package.name??'',
+        price: _package.price??0,
+        benefits: _package.benefits??[],
+        duration_days: _package.duration_days??0,
+        group_size: _package.group_size??1,
         is_active: true,
     });
     const [isGroupPackage, setIsGroupPackage] = useState<boolean>(_package.id?true:false);
@@ -31,7 +31,7 @@ const NewPackageForm:FC<{setShowNewPackageForm:Dispatch<SetStateAction<boolean>>
         mes:false
     })
     const [inputErrors, setInputErrors] = useState(emptyFields)
-    const [price, setPrice]= useState<string>('');
+    const [price, setPrice]= useState<string>(_package.id?`${_package.price}`:'');
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
@@ -144,20 +144,6 @@ const NewPackageForm:FC<{setShowNewPackageForm:Dispatch<SetStateAction<boolean>>
         setTimeInput(prev=>({...prev, [event.target.value]:true}));
         setNewPackage({...newPackage, duration_days:1})
     }
-    useEffect(()=>{
-        if(_package.id){
-            setPrice(`${_package.price}`)
-            setNewPackage({
-                id: _package.id,
-                name: _package.name,
-                price: 0,
-                benefits: _package.benefits,    
-                duration_days: _package.duration_days,
-                group_size: _package.group_size,
-                is_active: true,
-            })
-        }
-    },[])
     return <form className={styles.form} onSubmit={handleSubmit}>
         <h2 className='text-2xl font-bold'>Crea un nuevo paquete</h2>
         <label htmlFor="name">
