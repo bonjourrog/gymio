@@ -1,7 +1,7 @@
 'use client'
 import { usePathname } from 'next/navigation';
 import styles from './style.module.css';
-import { DollarSign, LayoutDashboard, LucideBoxes, PieChart, Users } from "lucide-react";
+import { DollarSign, LayoutDashboard, LucideBoxes, Menu, PieChart, Users, X } from "lucide-react";
 import Link from 'next/link';
 
 const navItems = [
@@ -20,6 +20,8 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
     }
 
     return <main className="flex h-screen text-zinc-700">
+        <input type="checkbox" id="menu-toggle" className={styles["menu-checkbox"]}/>
+        <label htmlFor="menu-toggle" className={styles["menu-icon"]}>☰</label>
         <nav className={styles.navbar}>
             <ul className='flex flex-col gap-2 h-full'>
                 <li className={styles.logo}>GYM PRO</li>
@@ -33,7 +35,7 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
                                 aria-current={active ? 'page' : undefined}
                                 >
                                 <Icon size={15}/>
-                                {label}
+                                <p>{label}</p>
                             </Link>
                         </li>
                     )
