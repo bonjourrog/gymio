@@ -5,7 +5,7 @@ export interface Package{
     benefits:string[];
     duration_days:number;
     group_size:number;
-    isACtive:boolean;
+    is_active:boolean;
     updated_at?:Date;
     created_at?:Date;
 }
