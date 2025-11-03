@@ -1,0 +1,34 @@
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 2em;
+    width: 40em;
+    max-height: 45em;
+    border-radius: 1em;
+    background: white;
+    overflow: scroll;
+}
+.form :is(input, select) {
+    height: 3em;
+    width: 100%;
+    padding: 0em .3em;
+    border-radius: 1em;
+    border: .1em solid rgb(239, 239, 239);
+    outline-width: .1em;
+    color: #3d3d3d;
+    font-weight: normal;
+}
+.form label{
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    color: rgb(52, 52, 52);
+}
+.form select{
+    height: 3em;
+    padding: 0em .5em;
+    border-radius: .5em;
+    font-weight: lighter;
+    border: .1em solid rgb(239, 239, 239);
+}
