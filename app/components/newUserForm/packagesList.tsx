@@ -14,9 +14,12 @@ interface PackagesListProps {
 
 const PackagesList: FC<PackagesListProps> = ({ packageSelected, setPackageSelected, setNewCustomers }) => {
     const { packages } = usePackageStore();
+    
     const handleSelectPackage = (package_id: string) => {
+        if(!package_id)return;
         const _package: Package = packages.find(el => el.id === package_id) as Package;
-        setPackageSelected({ ..._package });
+        if(!_package)return
+        setPackageSelected({ ..._package, id:package_id });
     }
     return <>
         <h2 className='font-black'>Selecciona un paquete</h2>
@@ -45,7 +48,7 @@ const PackagesList: FC<PackagesListProps> = ({ packageSelected, setPackageSelect
                 </p>
             </section> : <ul>
                 {packages.map(pkg => (
-                    <li onClick={() => handleSelectPackage(pkg.id!)} className={styles.package}>
+                    <li key={pkg.id} onClick={() => handleSelectPackage(pkg.id!)} className={styles.package}>
                         <div className='bg-zinc-100 p-4 rounded-lg'>
                             <strong>{pkg.name}</strong>
                             <div className='flex gap-4 text-zinc-400 text-sm'>

@@ -49,12 +49,12 @@ export default function Members() {
                 </thead>
                 <tbody>
                     {customers.map(c=>(
-                        <tr>
-                        <th scope='row'>{c.name}</th>
-                        <td>{c.phone}</td>
-                        <th><span className="bg-orange-500 text-white rounded-lg px-4 py-2 font-light">Por vencer</span></th>
-                        <th><span className="bg-zinc-700 text-white rounded-lg px-4 py-2 font-light">Pagar</span></th>
-                    </tr>
+                        <tr key={c.id}>
+                            <th scope='row'>{c.name}</th>
+                            <td>{c.phone}</td>
+                            <th><span className="bg-orange-500 text-white rounded-lg px-4 py-2 font-light">Por vencer</span></th>
+                            <th><span className="bg-zinc-700 text-white rounded-lg px-4 py-2 font-light">Pagar</span></th>
+                        </tr>
                     ))}
                 </tbody>
             </table>

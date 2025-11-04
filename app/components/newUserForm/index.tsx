@@ -2,9 +2,8 @@
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import styles from './styles.module.css';
 import { ApiResponse } from '@/app/types/api';
-import { Calendar, Delete, DollarSign, Phone, Plus, Trash, Users2, X } from 'lucide-react';
+import {  FilePlus2, LucideArrowRight, Phone, Plus, Trash, Users2 } from 'lucide-react';
 import { Package } from '@/app/entity/package';
-import { usePackageStore } from '@/app/store/packageStore';
 import { Customer } from '@/app/entity/customer';
 import { DatePicker, DatePickerProps } from 'antd';
 import dayjs from 'dayjs';
@@ -16,9 +15,10 @@ dayjs.locale('es');
 import { spanishFormat } from '@/app/lib/formatting';
 import { emptyPackge } from '@/app/data/package';
 import PackagesList from './packagesList';
+import Link from 'next/link';
 
 export default function NewUserForm({ showForm }: { showForm: Dispatch<SetStateAction<boolean>> }) {
-    usePackages(true)
+    const {packages} = usePackages(true)
     
     const [user, setUser] = useState<Customer>({ name: '', phone: '' } as Customer);
     const {customers} = useCustomerStore();
@@ -82,7 +82,7 @@ export default function NewUserForm({ showForm }: { showForm: Dispatch<SetStateA
     const onChange: DatePickerProps['onChange'] = (date, dateString) => {
         console.log(date, dateString);
     };
-    return <form onSubmit={handleOnSubmit} className={styles.form}>
+    return packages?.length>0?<form onSubmit={handleOnSubmit} className={styles.form}>
         <PackagesList packageSelected={packageSelected} setPackageSelected={setPackageSelected} setNewCustomers={setNewCustomers}/>
         {
             packageSelected.id ?
@@ -95,7 +95,7 @@ export default function NewUserForm({ showForm }: { showForm: Dispatch<SetStateA
                     <section className={styles.users}>
                         {
                             Array.from({length:packageSelected?.group_size-newCustomers.length},(_,i)=>(
-                                <div className='flex items-center justify-center bg-zinc-100 border border-dashed h-24 rounded-lg opacity-25'>
+                                <div key={i} className='flex items-center justify-center bg-zinc-100 border border-dashed h-24 rounded-lg opacity-25'>
                                     <Users2 size={30} className='text-zinc-400'/>
                                 </div>
                             ))
@@ -104,9 +104,9 @@ export default function NewUserForm({ showForm }: { showForm: Dispatch<SetStateA
                             newCustomers?.map(nc => (
                                 <p key={nc.id} className='relative gap-10 bg-gray-100 p-2 rounded-md'>
                                     {nc.name}
-                                    <p className='flex items-center w-fit gap-2 my-2'>
+                                    <span className='flex items-center w-fit gap-2 my-2'>
                                         <Phone size={15} /> <span className='bg-blue-400 text-white rounded-lg px-2'>{nc.phone}</span>
-                                    </p>
+                                    </span>
                                     <Trash className='absolute top-4 right-4 cursor-pointer hover:text-red-300' onClick={() => {
                                         const c = newCustomers.filter(e => e.id !== nc.id)
                                         setNewCustomers([...c])
@@ -137,5 +137,22 @@ export default function NewUserForm({ showForm }: { showForm: Dispatch<SetStateA
             <button onClick={() => showForm(false)} className='p-2 px-4 rounded-lg cursor-pointer border border-zinc-400'>Cancelar</button>
             <button className='p-2 px-4 rounded-lg cursor-pointer border border-blue-500 text-blue-500'>Aceptar</button>
         </div>
-    </form>
+    </form>:<div className='flex flex-col items-center gap-10 bg-white p-10 rounded-3xl bg-linear-to-b from-red-200 via-white to-white'>
+        <div className='relative flex flex-col items-center'>
+            {/* <ClipboardList size={100} className='opacity-15 text-red-500 mb-7'/> */}
+            {/* <FilePlus size={100} className='opacity-15 text-red-500 mb-7'/>  */}
+            <FilePlus2 size={100} className='opacity-15 text-red-500 mb-7'/>
+            <strong className='text-3xl'>No hay paquetes creados</strong>
+            <p className='text-xl text-zinc-600 mt-2'>Crea uno para continuar</p>
+        </div>
+        <div className='flex justify-between gap-4 w-full'>
+            <button onClick={() => showForm(false)} className='p-2 px-4 cursor-pointer underline'>Cancelar</button>
+            <Link href="/dashboard/packages">
+                <button className='flex items-center gap-2 p-2 px-4 rounded-lg cursor-pointer border border-zinc-400'>
+                    Crear paquete
+                    <LucideArrowRight size={16} />
+                </button>
+            </Link>
+        </div>
+    </div>
 }

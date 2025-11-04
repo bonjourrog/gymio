@@ -33,10 +33,6 @@ export const usePackages = (autoFetch = false): UsePackagesReturn => {
                 headers: { 'Content-Type': 'application/json' }
             });
 
-            if (!res.ok) {
-                throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-            }
-
             const data: ApiResponse<Package[]> = await res.json();
 
             if (!data.success && data.code === "MISSING_PACKAGE") {

@@ -7,10 +7,12 @@ import { ChangeEvent, Dispatch, FC, FormEvent, FormEventHandler, SetStateAction,
 import { ApiResponse } from '@/app/types/api';
 import { usePackageStore } from '@/app/store/packageStore';
 import { handlePriceFormat } from '@/app/lib/formatting';
+import { emptyPackge } from '@/app/data/package';
 
 const NewPackageForm:FC<{setShowNewPackageForm:Dispatch<SetStateAction<boolean>>}> = ({setShowNewPackageForm}) => {
     const { addPackage, _package, setPackage:_setNewPackage, packages, setPackages } = usePackageStore();
     const [newPackage, setNewPackage] = useState<Package>({
+        id:_package.id??undefined,
         name: _package.name??'',
         price: _package.price??0,
         benefits: _package.benefits??[],
@@ -87,6 +89,7 @@ const NewPackageForm:FC<{setShowNewPackageForm:Dispatch<SetStateAction<boolean>>
             if(response.success){
                 if(response.code === 'PACKAGE_CREATED'){
                     addPackage(response.data)
+                    fetchConf = {url:'', method:'',body:{}}
                 }else if(response.code === "PACKAGE_UPDATED"){
                     const _packages:Package[] = [...packages];
                     const pkgIndex:number = _packages.findIndex(el=>el.id===_package.id);
@@ -102,6 +105,7 @@ const NewPackageForm:FC<{setShowNewPackageForm:Dispatch<SetStateAction<boolean>>
             console.log(error);
         }finally{
             setShowNewPackageForm(false);
+            _setNewPackage(emptyPackge)
         }
     }
     const handleGroupToggle = ()=>{
