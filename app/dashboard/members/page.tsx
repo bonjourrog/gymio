@@ -1,11 +1,14 @@
 'use client'
 
+import NewUserForm from "@/app/components/newUserForm";
 import { useCustomerStore } from "@/app/store/customerStore"
 import { ApiResponse } from "@/app/types/api";
-import { useEffect } from "react";
+import { Plus } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function Members() {
     const {customers, setCustomers} = useCustomerStore();
+    const [showNewUserForm, setShowNewUserForm] =useState<boolean>(false);
     const handleCustomersRetrieve = async()=>{
         try {
             const res = await fetch('/api/customer',{
@@ -24,17 +27,24 @@ export default function Members() {
     useEffect(()=>{
         handleCustomersRetrieve()
     },[])
-    return <section className="p-10">
+    return <section className="p-10 pt-0">
+        {
+            showNewUserForm?<div className="fixed left-0 top-0 flex items-center justify-center h-screen w-screen bg-zinc-950/20">
+                <NewUserForm showForm={setShowNewUserForm}/>
+            </div>:undefined
+        }
+        <div className="flex justify-end mb-4">
+            <button onClick={()=>setShowNewUserForm(true)} className="flex items-center gap-2 p-2 px-4 rounded-full border border-blue-300 text-blue-500 bg-blue-50">
+            <Plus size={17}/>
+            Agregar
+        </button>
+        </div>
         <div className="table">
             <table>
                 <thead className='rounded-2xl'>
                     <tr>
                         <th>Nombre</th>
                         <th>Telefono</th>
-                        {/* <th>Membresia</th> */}
-                        {/* <th>Vencimiento</th>
-                        <th>Estado</th>
-                        <th>Acción</th> */}
                     </tr>
                 </thead>
                 <tbody>

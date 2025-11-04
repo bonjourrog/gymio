@@ -1,27 +1,36 @@
 'use client'
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import styles from './styles.module.css';
 import { ApiResponse } from '@/app/types/api';
-import { X } from 'lucide-react';
+import { Calendar, Delete, DollarSign, Phone, Plus, Trash, Users2, X } from 'lucide-react';
 import { Package } from '@/app/entity/package';
 import { usePackageStore } from '@/app/store/packageStore';
 import { Customer } from '@/app/entity/customer';
+import { DatePicker, DatePickerProps } from 'antd';
+import dayjs from 'dayjs';
+import 'dayjs/locale/es';
+import locale from 'antd/es/date-picker/locale/es_ES';
+import { useCustomerStore } from '@/app/store/customerStore';
+import { usePackages } from '@/app/hooks/usePackages';
+dayjs.locale('es');
+import { spanishFormat } from '@/app/lib/formatting';
+import { emptyPackge } from '@/app/data/package';
+import PackagesList from './packagesList';
 
-export default function NewUserForm({showForm}:{showForm:Dispatch<SetStateAction<boolean>>}) {
+export default function NewUserForm({ showForm }: { showForm: Dispatch<SetStateAction<boolean>> }) {
+    usePackages(true)
+    
     const [user, setUser] = useState<Customer>({ name: '', phone: '' } as Customer);
-    const {packages, setPackages} = usePackageStore();
-    const [newPackage, setNewPackage] = useState<Package>({
-        name:'',
-        price:0,
-        benefits:[],
-        duration_days:0,
-        group_size:0,
-        is_active:true,
-    });
-    const [loading, setLoading] = useState<boolean>(true)
+    const {customers} = useCustomerStore();
+    const [newCustomers, setNewCustomers] = useState<Customer[]>([])
+    const [customerList, setCustomerList]=useState<Customer[]>(customers);
+    const [packageSelected, setPackageSelected] = useState<Package>(emptyPackge);
+
     const handleOnCahnge = (event: ChangeEvent<HTMLInputElement>) => {
         const field: string = event.currentTarget.name
         let value: string = event.currentTarget.value
+        const newCustomerList:Customer[] = customers.filter(c=>c.name.toLowerCase().includes(value.toLowerCase()));
+        setCustomerList(newCustomerList);
         if (field === 'phone') {
             if (value.length > 12) {
                 return
@@ -46,110 +55,87 @@ export default function NewUserForm({showForm}:{showForm:Dispatch<SetStateAction
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newUser),
             })
-            const data:ApiResponse = await res.json();
-            if(!data.success){
+            const data: ApiResponse = await res.json();
+            if (!data.success) {
                 throw new Error(data.message)
             }
             showForm(false);
-            
+
         } catch (err) {
             console.error('Error en fetch:', err)
         }
     }
-    const handleNewPackage = async()=>{
-        try {
-            const _newPackage:Package = {name:newPackage.name, price:newPackage.price, benefits:newPackage.benefits, duration_days:0, group_size:0, is_active:true}
-            const res = await fetch('/api/package',{
-                method:'POST',
-                headers:{'Content-Type':'application/json'},
-                body:JSON.stringify(_newPackage)
-            })
-            const response:ApiResponse = await res.json();
-            if(!response.success){
-                throw new Error(response.message)
-            }
-            setPackages([...packages, response.data])
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    const handlePackageRequest = async () => {
-        try {
-            const res = await fetch('/api/package', {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            });
-            const data:ApiResponse = await res.json();
-            if(!data.success && data.code === "MISSING_PACKAGE"){
-                setPackages([]);
-                setLoading(false);
-                return;
-            }
-            setLoading(false);
-            setPackages(data.data)
-        } catch (error) {
-            console.log(error);
+    const addNewCustomer = (customer: Customer) => {
+        if(packageSelected.group_size==newCustomers.length)return;
+        if(customer.name===''||customer.phone==="") return;
+        const alreadyAdded = newCustomers.findIndex(c=>c.name.toLowerCase()===customer.name.toLowerCase())
+        
+        if(alreadyAdded>=0)return
 
+        if(!customer.id){
+            customer.id = `${customer.name}-CREATE_CUSTOMER`
         }
+        setNewCustomers([...newCustomers, { name: customer.name, phone: customer.phone, id: customer.id }])
+        setUser({ name: '', phone: '' })
+        
     }
-    useEffect(() => {
-        handlePackageRequest();
-    }, [])
+    const onChange: DatePickerProps['onChange'] = (date, dateString) => {
+        console.log(date, dateString);
+    };
     return <form onSubmit={handleOnSubmit} className={styles.form}>
-        <label htmlFor="name">
-            Nombre y apellido
-            <input onChange={handleOnCahnge} value={user.name || ""} type="text" id="name" name="name" />
-        </label>
-
-        <label htmlFor="phone">
-            Telefono
-            <input onChange={handleOnCahnge} value={user.phone || ""} type="tel" pattern="^\+?[0-9\s\-]{7,15}$" id="phone" name="phone" />
-        </label>
-
+        <PackagesList packageSelected={packageSelected} setPackageSelected={setPackageSelected} setNewCustomers={setNewCustomers}/>
         {
-            loading?<label>Paquete <input type="text" disabled /></label>:packages.length===0?
-            <div className={styles.package}>
-                <label htmlFor="name">
-                        <strong className='text-indigo-400'>Nombre del paquete</strong>
-                        <input onChange={({ currentTarget: { value } }) => setNewPackage({ ...newPackage, name: value })} type="text" id='name' name='name' value={newPackage.name} />
+            packageSelected.id ?
+                <div className='flex flex-col gap-6'>
+                    <label htmlFor="registered_day">
+                        Fecha de inicio
+                        <DatePicker className={styles['date_picker']} onChange={onChange} locale={locale} format={spanishFormat} />
                     </label>
-
-                    <label htmlFor="price">
-                        <strong className='text-indigo-400'>Precio</strong>
-                        <input onChange={({ currentTarget: { value } }) => setNewPackage({ ...newPackage, price: Number(value) })} type="number" id='price' name='price' value={newPackage.price} />
-                    </label>
-
-                    <label htmlFor="benefits">
-                        <div className='flex flex-wrap gap-1'>
-                            {
-                                newPackage.benefits.map((elem, index) => <p className='relative group text-indigo-300 bg-indigo-50 w-fit px-2 rounded-sm border border-dotted cursor-pointer hover:bg-red-50 hover:text-red-300' key={`${elem}-${index}`}>
-                                    <X onClick={()=>setNewPackage({...newPackage, benefits:newPackage.benefits.filter(b=>b!==elem)})} className='absolute -right-3 -top-3 opacity-0 group-hover:opacity-100 bg-red-100 rounded-2xl p-1 z-10' size={20}/>
-                                    {elem}
-                                </p>)
-                            }
+                    <hr className='text-zinc-300' />
+                    <section className={styles.users}>
+                        {
+                            Array.from({length:packageSelected?.group_size-newCustomers.length},(_,i)=>(
+                                <div className='flex items-center justify-center bg-zinc-100 border border-dashed h-24 rounded-lg opacity-25'>
+                                    <Users2 size={30} className='text-zinc-400'/>
+                                </div>
+                            ))
+                        }
+                        {
+                            newCustomers?.map(nc => (
+                                <p key={nc.id} className='relative gap-10 bg-gray-100 p-2 rounded-md'>
+                                    {nc.name}
+                                    <p className='flex items-center w-fit gap-2 my-2'>
+                                        <Phone size={15} /> <span className='bg-blue-400 text-white rounded-lg px-2'>{nc.phone}</span>
+                                    </p>
+                                    <Trash className='absolute top-4 right-4 cursor-pointer hover:text-red-300' onClick={() => {
+                                        const c = newCustomers.filter(e => e.id !== nc.id)
+                                        setNewCustomers([...c])
+                                    }} size={13} />
+                                </p>
+                            ))
+                        }
+                    </section>
+                    <section className='flex gap-2'>
+                        <label htmlFor="name">
+                            Nombre y apellido
+                            <input onChange={handleOnCahnge} value={user.name || ""} type="text" id="name" name="name" />
+                            {user.name ? <ul className={styles['customers-list']}>
+                                {customerList?.map(c => <li key={c.id} onClick={() => addNewCustomer(c)}>{c.name}</li>)}
+                            </ul> :undefined}
+                        </label>
+                        <label htmlFor="phone">
+                            Telefono
+                            <input onChange={handleOnCahnge} value={user.phone || ""} type="tel" pattern="^\+?[0-9\s\-]{7,15}$" id="phone" name="phone" />
+                        </label>
+                        <div className='pt-8'>
+                            <Plus onClick={()=>addNewCustomer({...user})} className='border rounded-lg p-1 cursor-pointer text-zinc-400 hover:bg-blue-500 hover:text-white' size={30}/>
                         </div>
-                        <strong className='text-indigo-400'>Beneficios</strong>
-                        <input onKeyDown={(e) => {
-                            if(newPackage.benefits.length>10)return
-                            if (e.key === "Enter" && e.currentTarget.value !== "") {
-                                
-                                setNewPackage({ ...newPackage, benefits: [...newPackage.benefits, e.currentTarget.value] })
-                                e.currentTarget.value = ""
-                            }
-
-                        }} type="text" id='benefits' name='benefits' />
-                    </label>
-                    <button type='button' onClick={handleNewPackage} className='px-6 py-2 w-fit mx-auto  cursor-pointer rounded-md font-black bg-indigo-400 text-white'>Crear paquete</button>
-                </div>
-                : <>
-                    <label htmlFor="package">
-                        Paquete
-                        <select name="" id="package">
-                            {packages.map(pkg=>(<option key={`${pkg.name}-${pkg.id}`} value={pkg.name}>{pkg.name}</option>))}
-                        </select>
-                    </label>
-                    <button className='px-6 py-2 w-fit mx-auto  cursor-pointer rounded-md font-black bg-indigo-400 text-white'>Crear</button>
-                </>
+                    </section>
+                </div> : undefined
         }
+        <div className='flex gap-2 justify-end'>
+            <button onClick={() => showForm(false)} className='p-2 px-4 rounded-lg cursor-pointer border border-zinc-400'>Cancelar</button>
+            <button className='p-2 px-4 rounded-lg cursor-pointer border border-blue-500 text-blue-500'>Aceptar</button>
+        </div>
     </form>
 }
