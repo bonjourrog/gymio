@@ -1,0 +1,1 @@
+export const emptyPackge = { name: '', benefits: [], duration_days: 0, group_size: 0, is_active: true, price: 0, id: '' }
