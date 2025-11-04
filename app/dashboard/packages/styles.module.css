@@ -1,7 +1,7 @@
 .packages{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1em;
+    gap: 2em;
     max-height: calc(100vh - 14em);
     overflow: scroll;
 }
@@ -12,7 +12,8 @@
     justify-content: space-between;
     padding: 2em;
     /* max-width: 20em; */
-    border:.2em solid rgb(197, 210, 252);
+    background: #f6f6f67d;
+    border:.1em dashed rgb(176, 194, 255);
     border-radius: 2em;
 }
 .package__name{
