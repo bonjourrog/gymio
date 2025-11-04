@@ -4,8 +4,8 @@ import NewPackageForm from '@/app/components/newPackageForm';
 import styles from './styles.module.css';
 import { usePackageStore } from "@/app/store/packageStore"
 import { ApiResponse } from "@/app/types/api"
-import { Calendar, Check, CheckCircle, File, Users2 } from "lucide-react"
-import { MouseEvent, ReactNode, useEffect, useState } from "react"
+import { Calendar, FilePlusIcon, CheckCircle, Users2 } from "lucide-react"
+import { useEffect, useState } from "react"
 import { Package } from '@/app/entity/package';
 
 export default function Packages() {
@@ -71,8 +71,8 @@ export default function Packages() {
             </div> : null
         }
         <div className='flex justify-end'>
-            <button onClick={() => setShowNewPackageForm(true)} className='flex items-center gap-2 my-2 border-2 border-blue-400 px-4 rounded-lg bg-blue-50 text-blue-500 py-2'>
-                <File size={15}/>
+            <button onClick={() => setShowNewPackageForm(true)} className='flex items-center gap-2 my-2 border border-blue-400 px-4 rounded-full bg-blue-50 text-blue-500 py-2'>
+                <FilePlusIcon size={15}/>
                 Agregar
             </button>
         </div>
