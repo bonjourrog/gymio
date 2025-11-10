@@ -80,3 +80,14 @@ select {
   background: none;     /* Opcional: elimina color de fondo */
   border: 1px solid #ccc; /* Personaliza el borde si quieres */
 }
+[data-sonner-toast]{
+  width: fit-content !important;
+}
+[data-sonner-toast][data-type="info"] {
+  background-image: linear-gradient(to right, rgb(207, 216, 255), white, white) !important;
+  color: rgb(98, 98, 252) !important;
+}
+[data-sonner-toast][data-type="error"] {
+  background-image: linear-gradient(to right, rgb(255, 207, 207), white, white) !important;
+  color: rgb(252, 98, 98) !important;
+}
