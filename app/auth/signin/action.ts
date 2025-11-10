@@ -24,6 +24,6 @@ export async function login(formData: FormData) {
         .eq("id", user.id)
         .single()
 
-    if(!profile)redirect('/onboarding')
+    if(!profile)redirect('/auth/onboarding')
     redirect('/dashboard')
 }
