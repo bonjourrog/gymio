@@ -17,3 +17,12 @@ export const spanishFormat = (value: Dayjs | null): string => {
     if (!value) return '';
     return value.format('ddd D [de] MMM');
 };
+export const formatPhoneNumber = (value: string):string => {
+    value = value.replace(/\D/g, '');
+    if (value.length > 6) {
+        value = value.replace(/(\d{3})(\d{3})(\d+)/, '$1 $2 $3')
+    } else if (value.length > 3) {
+        value = value.replace(/(\d{3})(\d+)/, '$1 $2')
+    }
+    return value;
+}
