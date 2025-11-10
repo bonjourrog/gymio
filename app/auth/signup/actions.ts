@@ -10,8 +10,6 @@ export async function signup(formData: FormData) {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     const confirm_password = formData.get('confirm_password') as string;
-    const phone = formData.get('phone') as string;
-    const gym_name = formData.get('gym_name') as string;
 
     let message:string = '';
 
@@ -25,8 +23,9 @@ export async function signup(formData: FormData) {
         password,
         options: {
             data: {
-                phone,
-                gym_name
+                "role": "owner",
+                "profile_completed": false,
+                "subscription_active": false
             }
         }
     })
