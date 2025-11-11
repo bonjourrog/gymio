@@ -91,3 +91,11 @@ select {
   background-image: linear-gradient(to right, rgb(255, 207, 207), white, white) !important;
   color: rgb(252, 98, 98) !important;
 }
+[data-sonner-toast][data-type="success"] {
+  background-image: linear-gradient(to right, rgb(207, 255, 226), white, white) !important;
+  color: rgb(70, 181, 116) !important;
+}
+[data-sonner-toast][data-type="warning"] {
+  background-image: linear-gradient(to right, rgb(255, 243, 207), white, white) !important;
+  color: rgb(205, 181, 73) !important;
+}
