@@ -102,6 +102,8 @@ const NewPackageForm:FC<{setShowNewPackageForm:Dispatch<SetStateAction<boolean>>
                 }
             }
         } catch (error) {
+            console.error('un error');
+            
             console.log(error);
         }finally{
             setShowNewPackageForm(false);

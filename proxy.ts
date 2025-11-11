@@ -15,7 +15,6 @@ export default async function middleware(req: NextRequest) {
     const pathname = url.pathname;
     const isAuthRoute = pathname.startsWith("/auth/signin") || pathname.startsWith("/auth/signup");
     const isProtectedRoute = pathname.startsWith("/dashboard")
-    console.log(user?.user_metadata);
     
     if (!user) {
         if(isProtectedRoute){
@@ -40,5 +39,5 @@ export default async function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/dashboard/:path*", "/auth/signin", "/auth/signup", "/billing/:path*",],
+    matcher: ["/dashboard/:path*", "/auth/signin", "/auth/signup", "/billing/:path*"],
 };
