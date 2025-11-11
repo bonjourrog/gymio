@@ -1,43 +1,42 @@
 'use client'
 
 import NewSubForm from "@/app/components/newSubForm";
+import NewUserForm from "@/app/components/newUserform";
+import { useUser } from "@/app/hooks/useUser";
 import { useCustomerStore } from "@/app/store/customerStore"
 import { ApiResponse } from "@/app/types/api";
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function Members() {
-    const {customers, setCustomers} = useCustomerStore();
+    const {customers} = useCustomerStore();
+    const {getUsers} = useUser()
     const [showNewUserForm, setShowNewUserForm] =useState<boolean>(false);
-    const handleCustomersRetrieve = async()=>{
-        try {
-            const res = await fetch('/api/customer',{
-            method:'GET'
-        })
-        const data:ApiResponse = await res.json();
-        if(!data.success){
-            throw new Error(data.message)
-        }
-        setCustomers(data.data);
-        } catch (error:any) {
-            console.log(error.message);
-        }
-        
-    }
+    const [showNewSubForm, setShowNewSubForm] =useState<boolean>(false);
+    
     useEffect(()=>{
-        handleCustomersRetrieve()
+        getUsers();
     },[])
     return <section className="p-10 pt-0">
         {
-            showNewUserForm?<div className="fixed left-0 top-0 flex items-center justify-center h-screen w-screen bg-zinc-950/20">
-                <NewSubForm showForm={setShowNewUserForm}/>
+            showNewSubForm?<div className="fixed left-0 top-0 flex items-center justify-center h-screen w-screen bg-zinc-950/20">
+                <NewSubForm showForm={setShowNewSubForm}/>
             </div>:undefined
         }
-        <div className="flex justify-end mb-4">
-            <button onClick={()=>setShowNewUserForm(true)} className="flex items-center gap-2 p-2 px-4 rounded-full border border-blue-300 text-blue-500 bg-blue-50">
-            <Plus size={17}/>
-            Agregar
-        </button>
+        {
+            showNewUserForm?<div className="fixed left-0 top-0 flex items-center justify-center h-screen w-screen bg-zinc-950/20">
+                <NewUserForm showForm={setShowNewUserForm}/>
+            </div>:undefined
+        }
+        <div className="flex justify-end gap-2 mb-4">
+            <button onClick={() => setShowNewUserForm(true)} className="flex items-center gap-2 p-2 px-4 rounded-full text-white bg-zinc-800">
+                <Plus size={17} />
+                Agregar rapido
+            </button>
+            <button onClick={() => setShowNewSubForm(true)} className="flex items-center gap-2 p-2 px-4 rounded-full border border-blue-300 text-blue-500 bg-blue-50">
+                <Plus size={17} />
+                Agregar
+            </button>
         </div>
         <div className="table">
             <table>

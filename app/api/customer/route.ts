@@ -1,10 +1,16 @@
 import { supabase } from '@/app/lib/supabaseClient';
+import { createClient } from '@/app/lib/supabaseServerClient';
 import { ApiResponse } from '@/app/types/api';
 
 export async function POST(request: Request) {
     try {
+        const supabaseServer = await createClient()
+        const {data:{user}} = await supabaseServer.auth.getUser();
+        if (!user) return new Response("Unauthorized", { status: 401 });
+        
         const body = await request.json()
-        const { data, error } = await supabase.from('customers').insert([body])
+        body.owner_id = user?.id;
+        const { data, error } = await supabase.from('customers').insert([body]).select();
         if (error) {
             const res: ApiResponse = {
                 success: false,
