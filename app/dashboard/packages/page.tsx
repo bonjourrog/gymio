@@ -14,15 +14,20 @@ export default function Packages() {
     const [confirmDelete, setComfirmDelete] = useState<string>('');
     const [showNewPackageForm, setShowNewPackageForm] = useState<boolean>(false);
     const handleGetPackage = async () => {
-        const res = await fetch('/api/package', {
-            method: 'GET',
-            cache: 'no-store',
-        })
-        const response: ApiResponse = await res.json();
-        if (response.code === 'MISSING_PACKAGE') {
-            setPackages([]);
+        try {
+            const res = await fetch('/api/package', {
+                method: 'GET',
+                cache: 'no-store',
+            })
+            const response: ApiResponse = await res.json();
+            if (response.code === 'MISSING_PACKAGE') {
+                setPackages([]);
+                return
+            }
+            setPackages(response.data)
+        } catch (error) {
+            console.log('ocurrio un error ', error);
         }
-        setPackages(response.data)
 
     }
     const handleDeltePackage = async () => {
@@ -45,8 +50,6 @@ export default function Packages() {
     const handleEditPackage = (package_id: string) => {
         setShowNewPackageForm(true);
         const _package: Package | undefined = packages.find(pkg => pkg.id === package_id);
-        console.log(_package?.id);
-        
         if (_package) {
             setPackage({ ..._package, id:_package.id });
         }
