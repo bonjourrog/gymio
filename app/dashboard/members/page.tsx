@@ -1,6 +1,6 @@
 'use client'
 
-import NewUserForm from "@/app/components/newUserForm";
+import NewSubForm from "@/app/components/newSubForm";
 import { useCustomerStore } from "@/app/store/customerStore"
 import { ApiResponse } from "@/app/types/api";
 import { Plus } from "lucide-react";
@@ -30,7 +30,7 @@ export default function Members() {
     return <section className="p-10 pt-0">
         {
             showNewUserForm?<div className="fixed left-0 top-0 flex items-center justify-center h-screen w-screen bg-zinc-950/20">
-                <NewUserForm showForm={setShowNewUserForm}/>
+                <NewSubForm showForm={setShowNewUserForm}/>
             </div>:undefined
         }
         <div className="flex justify-end mb-4">

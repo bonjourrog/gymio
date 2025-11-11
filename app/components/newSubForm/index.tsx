@@ -17,7 +17,7 @@ import { emptyPackge } from '@/app/data/package';
 import PackagesList from './packagesList';
 import Link from 'next/link';
 
-export default function NewUserForm({ showForm }: { showForm: Dispatch<SetStateAction<boolean>> }) {
+export default function NewSubForm({ showForm }: { showForm: Dispatch<SetStateAction<boolean>> }) {
     const {packages} = usePackages(true)
     
     const [user, setUser] = useState<Customer>({ name: '', phone: '' } as Customer);

@@ -2,8 +2,8 @@
 
 import styles from './style.module.css';
 import { ArrowUpIcon, ChartArea, Check, CheckCircle2, DollarSign, Plus, TriangleAlert, Users2Icon } from "lucide-react";
-import NewUserForm from '../components/newUserForm';
 import { useState } from 'react';
+import NewSubForm from '../components/newSubForm';
 
 export default function Home() {
     const [showForm, setShowForm] = useState<boolean>(false);
@@ -14,7 +14,7 @@ export default function Home() {
 
     return <>
         {showForm?<div className='fixed top-0 lef-0 flex items-center justify-center w-[calc(100%-13em)] h-full bg-zinc-900/10 z-10'>
-            <NewUserForm showForm={setShowForm} />
+            <NewSubForm showForm={setShowForm} />
         </div>:null}
         <section className={styles.home}>
             <ul className="grid grid-cols-3 pt-10 gap-10">
@@ -22,8 +22,8 @@ export default function Home() {
                     <button onClick={handleShowNewUserform} className={styles.action}>
                         <Plus size={30} />
                         <div>
-                            <p className={styles['action__headline']}>Nuevo Miembro</p>
-                            <p>Registra Cliente Nuevo</p>
+                            <p className={styles['action__headline']}>Nueva suscripción</p>
+                            <p>Registra Suscripción</p>
                         </div>
                     </button>
                 </li>
