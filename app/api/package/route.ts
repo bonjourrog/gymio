@@ -1,6 +1,6 @@
 import { supabase } from '@/app/lib/supabaseClient';
+import { createClient } from '@/app/lib/supabaseServerClient';
 import { ApiResponse } from '@/app/types/api';
-import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
     try {
@@ -43,6 +43,10 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
     try {
         const body = await request.json();
+        const supabaseServer = await createClient();
+        const {data:{user}}  = await  supabaseServer.auth.getUser();
+        if (!user) return new Response("Unauthorized", { status: 401 });
+        body.owner_id = user?.id;
         const { data, error } = await supabase.from('packages').insert(body).select();
         if (error) {
             const res: ApiResponse = {
