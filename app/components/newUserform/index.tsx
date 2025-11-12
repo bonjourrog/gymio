@@ -30,7 +30,7 @@ export default function NewUserForm({ showForm }: { showForm?: Dispatch<SetState
                 name: name,
                 phone: phone
             }
-            const res = await registerUser(newCustomer);
+            const res = await registerUser([newCustomer]);
             if(res.error){
                 toast.error(res.message)
                 return

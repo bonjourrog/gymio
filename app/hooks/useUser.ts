@@ -24,17 +24,17 @@ export function useUser() {
         }
     }
 
-    const registerUser = async (newCustomer: Customer) => {
+    const registerUser = async (newCustomers: Customer[]) => {
         try {
             setLoading(true);
             const res = await fetch('/api/customer', {
                 method: 'POST',
-                body: JSON.stringify(newCustomer)
+                body: JSON.stringify(newCustomers)
             });
             if (!res.ok) throw new Error(res.statusText);
             const response: ApiResponse = await res.json();
-            if (!response.success) throw new Error(response.message)
-            console.log('usuario creado, ', response.data);
+            
+            if (!response.success) throw new Error(response.message);
             setCustomers([...customers, ...response.data])
             return {
                 error: false,
