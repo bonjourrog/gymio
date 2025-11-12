@@ -4,9 +4,8 @@ import NewSubForm from "@/app/components/newSubForm";
 import NewUserForm from "@/app/components/newUserform";
 import { useUser } from "@/app/hooks/useUser";
 import { useCustomerStore } from "@/app/store/customerStore"
-import { ApiResponse } from "@/app/types/api";
 import { Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Members() {
     const {customers} = useCustomerStore();
@@ -14,9 +13,6 @@ export default function Members() {
     const [showNewUserForm, setShowNewUserForm] =useState<boolean>(false);
     const [showNewSubForm, setShowNewSubForm] =useState<boolean>(false);
     
-    useEffect(()=>{
-        getUsers();
-    },[])
     return <section className="p-10 pt-0">
         {
             showNewSubForm?<div className="fixed left-0 top-0 flex items-center justify-center h-screen w-screen bg-zinc-950/20">

@@ -4,6 +4,8 @@ import styles from './style.module.css';
 import { DollarSign, LayoutDashboard, LucideBoxes, Menu, PieChart, Users, X } from "lucide-react";
 import Link from 'next/link';
 import { logout } from '../actions/logout/action';
+import { useEffect } from 'react';
+import { useUser } from '../hooks/useUser';
 
 const navItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -14,7 +16,8 @@ const navItems = [
 ]
 
 export default function DashboardLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-    const pathName = usePathname()
+    const {getUsers} = useUser();
+    const pathName = usePathname();
     const isActive = (href: string) => {
         if (href === '/dashboard') return pathName === '/dashboard'
         return pathName.startsWith(href)
@@ -22,6 +25,10 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
     const handleLogout = async()=>{
         await logout()
     }
+    
+    useEffect(()=>{
+        getUsers();
+    },[])
     return <main className="flex max-h-screen overflow-hidden h-screen text-zinc-700">
         <input type="checkbox" id="menu-toggle" className={styles["menu-checkbox"]}/>
         <label htmlFor="menu-toggle" className={styles["menu-icon"]}>☰</label>
