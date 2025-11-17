@@ -1,7 +1,7 @@
 'use client'
 import { usePathname } from 'next/navigation';
 import styles from './style.module.css';
-import { DollarSign, LayoutDashboard, LucideBoxes, Menu, PieChart, Users, X } from "lucide-react";
+import { DollarSign, LayoutDashboard, LucideBoxes, Menu, PieChart, Settings, Users, X } from "lucide-react";
 import Link from 'next/link';
 import { logout } from '../actions/logout/action';
 import { useEffect } from 'react';
@@ -13,6 +13,7 @@ const navItems = [
     { href: '/dashboard/payments', label: 'Pagos', icon: DollarSign },
     { href: '/dashboard/packages', label: 'Paquetes', icon: LucideBoxes },
     { href: '/dashboard/reports', label: 'Reporte', icon: PieChart },
+    { href: '/dashboard/settings', label: 'Configuración', icon: Settings },
 ]
 
 export default function DashboardLayout({ children }: Readonly<{ children: React.ReactNode }>) {

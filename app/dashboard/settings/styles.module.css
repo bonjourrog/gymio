@@ -1,0 +1,24 @@
+.dlt-user{
+    display: none;
+}
+.toggle{
+    display: block;
+    width: 4em;
+    padding: .2em;
+    background: #d0d0d0;
+    border-radius: 5em;
+    cursor: pointer;
+}
+.toggle>div{
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 5em;
+    background: white;
+    transition: transform .1s ease-in-out;
+}
+.dlt-user:checked + .toggle{
+    background-color: rgb(105, 142, 255);
+}
+.dlt-user:checked + .toggle>div{
+    transform: translateX(2.1em);
+}
