@@ -109,7 +109,7 @@
     font-style: italic;
     background: #f0f0f08e;
     border-radius: .5em;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 .customers-list>li{
     padding: .5em;

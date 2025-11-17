@@ -2,8 +2,11 @@
 
 import NewSubForm from "@/app/components/newSubForm";
 import NewUserForm from "@/app/components/newUserform";
+import { Membership } from "@/app/entity/membership";
 import { useUser } from "@/app/hooks/useUser";
+import { formatPhoneNumber, handlePriceFormat } from "@/app/lib/formatting";
 import { useCustomerStore } from "@/app/store/customerStore"
+import dayjs from "dayjs";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
@@ -12,6 +15,60 @@ export default function Members() {
     const {getUsers} = useUser()
     const [showNewUserForm, setShowNewUserForm] =useState<boolean>(false);
     const [showNewSubForm, setShowNewSubForm] =useState<boolean>(false);
+    
+
+    // Mapea cada membership_id a un color fijo
+    const colorMap: Record<string, string> = {};
+    const colors = [
+        'bg-[#e8f1ec] text-[#4a6657]',
+        'bg-[#ebe9f5] text-[#5d5477]',
+        'bg-[#f8ede9] text-[#7a574a]',
+        'bg-[#e9f2f9] text-[#4a5f7a]',
+        'bg-[#f5e9ed] text-[#7a4a5f]',
+        // 'bg-[#f9f8fc]',
+    ];
+
+    // Asigna color por membership_id
+    const getMembershipColor = (membershipId?: string) => {
+        if (!membershipId) return ''; // sin membresía, fondo normal
+
+        if (!colorMap[membershipId]) {
+            const nextColor = colors[Object.keys(colorMap).length % colors.length];
+            colorMap[membershipId] = nextColor;
+        }
+
+        return colorMap[membershipId];
+    };
+
+    const membershipStatus = (membership:Membership|undefined)=>{
+        let content = {text:'',  styles:''};
+        if(!membership){
+            content={
+                text:'Sin suscripcion', 
+                styles:'border border-zinc-400 text-zinc-700'
+            }
+        }else{
+            const expiredSoon = dayjs(membership.end_date).diff(dayjs(), 'day')
+            console.log(expiredSoon);
+            
+            switch(membership.status){
+                case 'active':
+                    content={text:'Activa', styles:'bg-green-300 text-green-800'}
+                    break;
+                case 'expired':
+                    content={text:'Expirada', styles:'bg-red-400 text-white'}
+                    break;
+                case 'paused':
+                    content={text:'Pausada', styles:'bg-yellow-200 text-zinc-700'}
+                    break;
+                case 'canceled':
+                    content={text:'Cancelada', styles:'bg-gray-200 text-zinc-500'}
+                    break;
+            }
+        }
+        
+        return <th><span className={`${content.styles} rounded-lg px-4 py-2 font-light`}>{content.text}</span></th>
+    }
     
     return <section className="p-10 pt-0">
         {
@@ -40,17 +97,32 @@ export default function Members() {
                     <tr>
                         <th>Nombre</th>
                         <th>Telefono</th>
+                        <th>Suscripcion</th>
+                        <th>Estado</th>
+                        <th>Plan</th>
+                        <th>Precio</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {customers.map(c=>(
+                    {customers.map(c=>{
+                        return(
                         <tr key={c.id}>
                             <th scope='row'>{c.name}</th>
                             <td>{c.phone}</td>
-                            <th><span className="bg-orange-500 text-white rounded-lg px-4 py-2 font-light">Por vencer</span></th>
-                            <th><span className="bg-zinc-700 text-white rounded-lg px-4 py-2 font-light">Pagar</span></th>
+                            <td>
+                                <span className={`${getMembershipColor(c.membership_customers?.[0]?.memberships?.id)} font-normal rounded-md p-2 text-sm`}>
+                                    {
+                                        c.membership_customers?.[0]?.memberships?`${c.membership_customers?.[0]?.memberships?.packages?.group_size!>1?
+                                        'FAM':'PER'}-${c.membership_customers?.[0]?.memberships?.id?.substring(0,5)||''}`:null
+                                    }
+                                </span>
+                            </td>
+                            {membershipStatus(c.membership_customers?.[0]?.memberships)}
+                            <td>{c.membership_customers?.[0]?.memberships?.packages?.name}</td>
+                            <th>{handlePriceFormat(`${c.membership_customers?.[0]?.memberships?.packages?.price}`)}</th>
+                            {/* <th><span className="bg-zinc-700 text-white rounded-lg px-4 py-2 font-light">Pagar</span></th> */}
                         </tr>
-                    ))}
+                    )})}
                 </tbody>
             </table>
         </div>

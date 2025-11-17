@@ -1,3 +1,5 @@
+import { Membership } from "./membership";
+
 export interface Customer{
     id?: string;
     name: string;
@@ -6,4 +8,8 @@ export interface Customer{
     updated_at?:Date;
     created_at?:Date;
     owner_id?:string;
+    membership_customers?:MembershipCustomers[];
+}
+interface MembershipCustomers{
+    memberships?:Membership;
 }
