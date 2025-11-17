@@ -38,7 +38,8 @@ export function useUser() {
             setCustomers([...customers, ...response.data])
             return {
                 error: false,
-                message: 'Cliente registrado'
+                message: 'Cliente registrado',
+                data:response.data
             }
 
         } catch (error: any) {
