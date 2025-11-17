@@ -50,9 +50,16 @@ form label{
     border-collapse: collapse;
     width: 100%;
 }
+.table th:first-child{
+  font-weight: 600;
+}
 .table th{
     text-align: start;
     padding: 1.5em;
+}
+.table td{
+  padding: 1em 1.5em;
+  color: gray;
 }
 .table tbody tr:hover{
     cursor: pointer;
