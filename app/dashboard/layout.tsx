@@ -1,7 +1,7 @@
 'use client'
 import { usePathname } from 'next/navigation';
 import styles from './style.module.css';
-import { DollarSign, LayoutDashboard, LucideBoxes, Menu, PieChart, Settings, Users, X } from "lucide-react";
+import { DollarSign, LayoutDashboard, LucideBoxes, PieChart, Settings, Users } from "lucide-react";
 import Link from 'next/link';
 import { logout } from '../actions/logout/action';
 import { useEffect } from 'react';

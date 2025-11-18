@@ -4,10 +4,10 @@ import NewSubForm from "@/app/components/newSubForm";
 import NewUserForm from "@/app/components/newUserform";
 import { Membership } from "@/app/entity/membership";
 import { useUser } from "@/app/hooks/useUser";
-import { formatPhoneNumber, handlePriceFormat } from "@/app/lib/formatting";
+import { formatPhoneNumber, handlePriceFormat, spanishFormat } from "@/app/lib/formatting";
 import { useCustomerStore } from "@/app/store/customerStore"
-import dayjs from "dayjs";
-import { Plus } from "lucide-react";
+import dayjs, { Dayjs } from "dayjs";
+import { Phone, Plus } from "lucide-react";
 import { useState } from "react";
 
 export default function Members() {
@@ -70,7 +70,7 @@ export default function Members() {
         return <th><span className={`${content.styles} rounded-lg px-4 py-2 font-light`}>{content.text}</span></th>
     }
     
-    return <section className="p-10 pt-0">
+    return <section className="p-10 pt-0 h-screen max-w-[calc(100vw-260px)]">
         {
             showNewSubForm?<div className="fixed left-0 top-0 flex items-center justify-center h-screen w-screen bg-zinc-950/20">
                 <NewSubForm showForm={setShowNewSubForm}/>
@@ -91,13 +91,14 @@ export default function Members() {
                 Agregar
             </button>
         </div>
-        <div className="table">
+        <div className="table-wrapper">
             <table>
-                <thead className='rounded-2xl'>
+                <thead>
                     <tr>
                         <th>Nombre</th>
                         <th>Telefono</th>
                         <th>Suscripcion</th>
+                        <th>Fecha inicio</th>
                         <th>Estado</th>
                         <th>Plan</th>
                         <th>Precio</th>
@@ -108,7 +109,10 @@ export default function Members() {
                         return(
                         <tr key={c.id}>
                             <th scope='row'>{c.name}</th>
-                            <td>{c.phone}</td>
+                            <td className="flex items-center">
+                                <Phone size={14} className="inline mr-2 mb-1"/>
+                                {c.phone}
+                            </td>
                             <td>
                                 <span className={`${getMembershipColor(c.membership_customers?.[0]?.memberships?.id)} font-normal rounded-md p-2 text-sm`}>
                                     {
@@ -117,6 +121,7 @@ export default function Members() {
                                     }
                                 </span>
                             </td>
+                            <th className="font-light">{spanishFormat(dayjs(c?.membership_customers?.[0]?.memberships?.start_date))}</th>
                             {membershipStatus(c.membership_customers?.[0]?.memberships)}
                             <td>{c.membership_customers?.[0]?.memberships?.packages?.name}</td>
                             <th>{handlePriceFormat(`${c.membership_customers?.[0]?.memberships?.packages?.price}`)}</th>
