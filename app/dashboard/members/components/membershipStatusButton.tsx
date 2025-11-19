@@ -1,7 +1,8 @@
 import { Membership } from "@/app/entity/membership";
 import dayjs from "dayjs";
+import { memo } from "react";
 
-export default function membershipStatus(membership: Membership | undefined) {
+function MembershipStatus({membership}: {membership?: Membership | undefined}) {
     let content = { text: '', styles: '' };
     if (!membership) {
         content = {
@@ -26,6 +27,7 @@ export default function membershipStatus(membership: Membership | undefined) {
                 content = { text: 'Cancelada', styles: 'bg-gray-200 text-zinc-500' }
                 break;
         }
-        return <th><span className={`${content.styles} rounded-lg px-4 py-2 font-light`}>{content.text}</span></th>
+        return <span className={`${content.styles} rounded-lg px-4 py-2 font-light cursor-pointer`}>{content.text}</span>
     }
 }
+export default memo(MembershipStatus)

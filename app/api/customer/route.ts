@@ -57,7 +57,8 @@ export async function GET(request: Request) {
                     id,
                     name,
                     price,
-                    group_size
+                    group_size,
+                    duration_days
                     )
                 )
                 )
