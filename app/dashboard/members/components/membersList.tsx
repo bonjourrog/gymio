@@ -1,6 +1,5 @@
 import styles from '../styles.module.css';
 import { Customer } from "@/app/entity/customer";
-// import { getMembershipColor } from '@/app/lib/utils';
 import { useCustomerStore } from "@/app/store/customerStore";
 import { Phone, User2 } from 'lucide-react';
 import MembershipStatus from './membershipStatusButton';
@@ -40,13 +39,10 @@ export default function MembersList() {
                             <td>{members[0].membership_customers?.[0]?.memberships?.packages?.price}</td>
                             <td>{spanishFormat(dayjs(members[0].membership_customers?.[0]?.memberships?.start_date))}</td>
                             <td style={{ padding: '1em' }}>{<MembershipStatus key={membershipId} membership={members[0].membership_customers?.[0]?.memberships} />}</td>
-                            <td className='flex items-center gap-2'>{members[0].membership_customers?.[0]?.memberships?.packages?.duration_days}</td>
+                            <td className='flex items-center gap-2'>{dayjs(members[0].membership_customers?.[0]?.memberships?.end_date).diff(dayjs(), 'day')}</td>
                         </tr>
                     </tbody>
                 </table>
-                {/* <h2 className="text-xl font-semibold mb-4">
-                    {membershipId === "Sin membresía" ? "Sin membresía" : `Membresía ID: ${membershipId}`} ({members.length})
-                </h2> */}
                 <ul className="list-inside pl-10">
                     {members.map(member => (
                         <li key={member.id} className="flex items-center gap-10 border-b border-zinc-100 py-2">
