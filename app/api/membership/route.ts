@@ -13,8 +13,6 @@ export async function POST(request: Request) {
         
         const { data, error } = await supabase.from('memberships').insert(body.membership).select();
         if(error){
-            console.log(error);
-            
             const res: ApiResponse = {
                 success: false,
                 message: error.message,
@@ -28,8 +26,6 @@ export async function POST(request: Request) {
         }))
         const { error:errorMM } = await supabase.from('membership_customers').insert(membership_customers)
         if(errorMM){
-            console.log(errorMM);
-            
             const res: ApiResponse = {
                 success: false,
                 message: errorMM.message,
