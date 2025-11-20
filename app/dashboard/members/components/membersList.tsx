@@ -3,7 +3,7 @@ import { Customer } from "@/app/entity/customer";
 import { useCustomerStore } from "@/app/store/customerStore";
 import { Phone, User2 } from 'lucide-react';
 import MembershipStatus from './membershipStatusButton';
-import { spanishFormat } from '@/app/lib/formatting';
+import { handlePriceFormat, spanishFormat } from '@/app/lib/formatting';
 import dayjs from 'dayjs';
 import { useMemo } from 'react';
 export default function MembersList() {
@@ -36,7 +36,7 @@ export default function MembersList() {
                     <tbody>
                         <tr className="text-left">
                             <td>{members[0].membership_customers?.[0]?.memberships?.packages?.name || membershipId}</td>
-                            <td>{members[0].membership_customers?.[0]?.memberships?.packages?.price}</td>
+                            <td>{handlePriceFormat(`${members[0].membership_customers?.[0]?.memberships?.packages?.price}`)}</td>
                             <td>{spanishFormat(dayjs(members[0].membership_customers?.[0]?.memberships?.start_date))}</td>
                             <td style={{ padding: '1em' }}>{<MembershipStatus key={membershipId} membership={members[0].membership_customers?.[0]?.memberships} />}</td>
                             <td className='flex items-center gap-2'>{dayjs(members[0].membership_customers?.[0]?.memberships?.end_date).diff(dayjs(), 'day')}</td>
