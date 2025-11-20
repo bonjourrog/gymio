@@ -38,7 +38,11 @@ export default function MembersList() {
                             <td>{members[0].membership_customers?.[0]?.memberships?.packages?.name || membershipId}</td>
                             <td>{handlePriceFormat(`${members[0].membership_customers?.[0]?.memberships?.packages?.price}`)}</td>
                             <td>{spanishFormat(dayjs(members[0].membership_customers?.[0]?.memberships?.start_date))}</td>
-                            <td style={{ padding: '1em' }}>{<MembershipStatus key={membershipId} membership={members[0].membership_customers?.[0]?.memberships} />}</td>
+                            <td style={{ padding: '1em' }}>{
+                                membershipId === "Sin membresía" ? 
+                                <p className='border w-fit px-2 py-1 font-medium rounded-lg'>{membershipId}</p> 
+                                :<MembershipStatus key={membershipId} membership={members[0].membership_customers?.[0]?.memberships} />
+                            }</td>
                             <td className='flex items-center gap-2'>{dayjs(members[0].membership_customers?.[0]?.memberships?.end_date).diff(dayjs(), 'day')}</td>
                         </tr>
                     </tbody>
