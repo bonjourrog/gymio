@@ -35,7 +35,12 @@ export default function NewSubForm({ showForm }: { showForm: Dispatch<SetStateAc
     const filteredUsers = useMemo(() => {
         const q = user?.name?.trim().toLowerCase() ?? "";
         if (!q) return customers;
-        return customers.filter(c => (c?.name ?? "").toLowerCase().includes(q));
+        return customers.filter(c => {
+            const status = c.membership_customers?.[0]?.memberships?.status;
+            return (c?.name ?? "").toLowerCase().includes(q)
+            && (status === 'canceled' || !status || status === 'expired')
+        }
+        );
     }, [user?.name, customers]);
 
     const handleOnCahnge = (event: ChangeEvent<HTMLInputElement>) => {
