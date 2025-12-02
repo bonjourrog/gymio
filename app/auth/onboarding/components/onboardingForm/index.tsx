@@ -36,7 +36,7 @@ export default function OnBoardingForm() {
     }
     return <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-[30em] p-10 border border-zinc-200 rounded-xl">
         <div className="text-zinc-700 mb-5">
-            <h2 className="text-3xl font-black">bienvenido</h2>
+            <h2 className="text-3xl font-black">Bienvenido</h2>
             <p>Termina el registro para poder ingresar</p>
         </div>
         <label htmlFor="gym_name">
