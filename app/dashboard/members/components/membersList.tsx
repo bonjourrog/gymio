@@ -10,7 +10,8 @@ export default function MembersList() {
     const { customers } = useCustomerStore();
     // Agrupar clientes por ID de membresía
     const customerList = useMemo(() => {
-        return customers.reduce((acc, customer) => {
+        const allowedStatuses = ['active', 'expired'];
+        return customers.filter(c=>allowedStatuses.includes(c.membership_customers?.[0]?.memberships?.status as string)).reduce((acc, customer) => {
             // Obtén el ID de la membresía
             const membresia = customer.membership_customers?.[0]?.memberships?.id || "Sin membresía";
             if (!acc[membresia]) acc[membresia] = [];

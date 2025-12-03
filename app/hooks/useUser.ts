@@ -15,15 +15,8 @@ export function useUser() {
             const data: ApiResponse = await res.json();
             if (!data.success) {
                 throw new Error(data.message);
-            }
-            const allowedStatuses = ['active', 'expired'];
-            const filtered = data.data.filter((c:Customer)=>{
-                const status = c.membership_customers?.[0]?.memberships?.status
-                if(!status)return false
-                return allowedStatuses.includes(status)
-            })
-            
-            setCustomers(filtered);
+            }            
+            setCustomers(data.data);
         } catch (error: any) {
             console.log(error.message);
         } finally {
