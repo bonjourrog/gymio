@@ -60,12 +60,16 @@ function MembershipStatus({ membership }: { membership?: Membership | undefined 
             <div className={styles["sk-chase-dot"]}></div>
             <div className={styles["sk-chase-dot"]}></div>
         </div>}
-        <span onClick={() => setShowMenu(true)} className={`${translateStatus(membership?.status!).styles} relative rounded-lg px-4 py-2 font-light cursor-pointer`}>
+        <span onClick={() => (membership?.status==='canceled' || membership?.status === "expired")&&setShowMenu(true)} className={`${translateStatus(membership?.status!).styles} relative rounded-lg px-4 py-2 font-light cursor-pointer`}>
             {
                 showMenu && <div className="absolute left-0 -top-6 flex flex-col gap-2 min-w-20 min-h-20 bg-white rounded-xl p-4 z-20 text-zinc-700">
-                    {status.filter(s => s !== membership?.status).map((s) => (
-                        <span onClick={() => updateStatus(s)} key={s} className={`py-2 px-6 rounded-md text-sm font-bold ${translateStatus(s).styles}`}>{translateStatus(s).text}</span>
-                    ))}
+                    {
+                        membership?.status === 'expired' ? <>
+                            <span onClick={() => updateStatus('active')} key={'active'} className={`py-2 px-6 rounded-md text-sm font-bold ${translateStatus('active').styles}`}>Activar</span>
+
+                            <span onClick={() => updateStatus('canceled')} key={'canceled'} className={`py-2 px-6 rounded-md text-sm font-bold ${translateStatus('canceled').styles}`}>Cancelar</span>
+                        </> : membership?.status === 'canceled' ? <span onClick={() => updateStatus('active')} key={'active'} className={`py-2 px-6 rounded-md text-sm font-bold ${translateStatus('active').styles}`}>Activar</span> : null
+                    }
                 </div>
             }
             {translateStatus(membership?.status!).text}
