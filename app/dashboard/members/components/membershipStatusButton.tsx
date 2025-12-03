@@ -1,12 +1,13 @@
-import { status } from "@/app/data/membership";
 import type { MembershipStatus } from "@/app/data/membership";
 import { Membership } from "@/app/entity/membership";
 import { useMembership } from "@/app/hooks/useMembership";
 import { memo, useState } from "react";
 import styles from "../styles.module.css";
 import { toast } from "sonner";
+import { useMembersContext } from "../membersContext";
 
 function MembershipStatus({ membership }: { membership?: Membership | undefined }) {
+    const {opeNewSubForm} = useMembersContext();
     const [showMenu, setShowMenu] = useState<boolean>(false);
     const { updateMembership, loading } = useMembership();
 
@@ -63,12 +64,16 @@ function MembershipStatus({ membership }: { membership?: Membership | undefined 
             <div className={styles["sk-chase-dot"]}></div>
             <div className={styles["sk-chase-dot"]}></div>
         </div>}
-        <span onClick={() => (membership?.status !== "refunded") && setShowMenu(true)} className={`${translateStatus(membership?.status!).styles} relative rounded-lg px-4 py-2 font-light cursor-pointer`}>
+        <span onClick={() => setShowMenu(true)} className={`${translateStatus(membership?.status!).styles} relative rounded-lg px-4 py-2 font-light cursor-pointer`}>
             {
                 showMenu && <div className="absolute left-0 -top-6 flex flex-col gap-2 min-w-20 min-h-20 bg-white rounded-xl p-4 z-20 text-zinc-700">
                     {
                         membership?.status === 'expired' ? <>
-                            <span onClick={() => updateStatus('active')} key={'active'} className={`py-2 px-6 rounded-md text-sm font-bold ${translateStatus('active').styles}`}>Activar</span>
+                            <span onClick={(e)=>{
+                                e.stopPropagation()
+                                setShowMenu(false)
+                                opeNewSubForm()
+                            }} key={'active'} className={`py-2 px-6 rounded-md text-sm font-bold ${translateStatus('active').styles}`}>Activar</span>
 
                             <span onClick={() => updateStatus('canceled')} key={'canceled'} className={`py-2 px-6 rounded-md text-sm font-bold ${translateStatus('canceled').styles}`}>Cancelar</span>
                         </> :
