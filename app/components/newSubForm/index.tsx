@@ -21,8 +21,10 @@ import { useUser } from '@/app/hooks/useUser';
 import { Membership } from '@/app/entity/membership';
 import { useMembership } from '@/app/hooks/useMembership';
 import { MembershipPayload } from '@/app/entity/membershipPayload';
+import { useMembersContext } from '@/app/dashboard/members/membersContext';
 
-export default function NewSubForm({ showForm }: { showForm: Dispatch<SetStateAction<boolean>> }) {
+export default function NewSubForm() {
+    const {closeNewSubForm} = useMembersContext()
     const { packages } = usePackages(true)
     const {registerUser} = useUser()
     const [user, setUser] = useState<Customer>({ name: '', phone: '' } as Customer);
@@ -93,7 +95,7 @@ export default function NewSubForm({ showForm }: { showForm: Dispatch<SetStateAc
             }
             const response = await registerMembership(payload);
             if(response.error)throw new Error(response.message)
-            showForm(false);
+            closeNewSubForm
 
         } catch (err) {
             toast.error('ha ocurrido in error al crear la suscripcion, intente de nuevo o recargue la pagina')
@@ -183,7 +185,7 @@ export default function NewSubForm({ showForm }: { showForm: Dispatch<SetStateAc
                 </div> : undefined
         }
         <div className='flex gap-2 justify-end'>
-            <button onClick={() => showForm(false)} className='p-2 px-4 rounded-lg cursor-pointer border border-zinc-400'>Cancelar</button>
+            <button onClick={closeNewSubForm} className='p-2 px-4 rounded-lg cursor-pointer border border-zinc-400'>Cancelar</button>
             <button className='p-2 px-4 rounded-lg cursor-pointer border border-blue-500 text-blue-500'>Aceptar</button>
         </div>
     </form> : <div className='flex flex-col items-center gap-10 bg-white p-10 rounded-3xl bg-linear-to-b from-red-200 via-white to-white'>
@@ -193,7 +195,7 @@ export default function NewSubForm({ showForm }: { showForm: Dispatch<SetStateAc
             <p className='text-xl text-zinc-600 mt-2'>Crea uno para continuar</p>
         </div>
         <div className='flex justify-between gap-4 w-full'>
-            <button onClick={() => showForm(false)} className='p-2 px-4 cursor-pointer underline'>Cancelar</button>
+            <button onClick={closeNewSubForm} className='p-2 px-4 cursor-pointer underline'>Cancelar</button>
             <Link href="/dashboard/packages">
                 <button className='flex items-center gap-2 p-2 px-4 rounded-lg cursor-pointer border border-zinc-400'>
                     Crear paquete
