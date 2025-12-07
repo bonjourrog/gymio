@@ -1,3 +1,4 @@
+import { Customer } from "../entity/customer";
 
 // Asigna color por membership_id
 export const getMembershipColor = (colorMap: Record<string, string>, membershipId?: string) => {
@@ -17,4 +18,8 @@ export const getMembershipColor = (colorMap: Record<string, string>, membershipI
     }
 
     return colorMap[membershipId];
+}
+export const getCustomerWithMembership = (customers: Customer[]):Customer[] => {
+    const allowedStatuses = ['active', 'expired'];
+    return customers.filter(c => allowedStatuses.includes(c.membership_customers?.[0]?.memberships?.status as string));
 }
