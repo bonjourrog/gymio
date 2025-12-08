@@ -4,17 +4,36 @@ import styles from './style.module.css';
 import { ArrowUpIcon, ChartArea, Check, CheckCircle2, DollarSign, Plus, TriangleAlert, Users2Icon } from "lucide-react";
 import { useState } from 'react';
 import NewSubForm from '../components/newSubForm';
+import { useCheckin } from '../hooks/useCheckin';
+import Checkin from '../components/checkin';
+import { toast } from 'sonner';
 
 export default function Home() {
     const [showForm, setShowForm] = useState<boolean>(false);
+    const [showCheckin, setShowCheckin] = useState<boolean>(false);
+    const {getAllCheckin} = useCheckin()
     
     const handleShowNewUserform = () => {
         setShowForm(true)
     }
 
+    const handleCheckin = async()=>{
+        try {
+            setShowCheckin(true)
+            await getAllCheckin()
+        } catch (error) {
+            toast.error("Error al cargar la lista de asistencia. Recargue la pagina")
+        }
+    }
+
     return <>
-        {showForm?<div className='fixed top-0 lef-0 flex items-center justify-center w-[calc(100%-13em)] h-full bg-zinc-900/10 z-10'>
-            <NewSubForm showForm={setShowForm} />
+        {showForm?<div className='fixed inset-0 flex items-center justify-center w-[calc(100%-13em)] h-full bg-zinc-900/10 z-10'>
+            <NewSubForm/>
+        </div>:null}
+        {showCheckin?<div 
+        onClick={(e)=>e.target === e.currentTarget && setShowCheckin(false)}
+        className='fixed top-0 lef-0 flex items-center justify-center w-[calc(100%-13em)] h-full bg-zinc-900/10 z-10'>
+            <Checkin/>
         </div>:null}
         <section className={styles.home}>
             <ul className="grid grid-cols-3 pt-10 gap-10">
@@ -27,7 +46,7 @@ export default function Home() {
                         </div>
                     </button>
                 </li>
-                <li>
+                <li onClick={handleCheckin}>
                     <button className={styles.action}>
                         <Check size={30} />
                         <div>
