@@ -5,11 +5,17 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET() {
     try {
         const supabase = await createClient()
-        const now = new Date().toISOString().split('T')[0];
-        
+        const startUTC = new Date();
+        // inicio del día local del usuario → a UTC
+        startUTC.setHours(0, 0, 0, 0);
+        const start = startUTC.toISOString();
+        // fin del día local del usuario → a UTC
+        const endUTC = new Date();
+        endUTC.setHours(23, 59, 59, 999);
+        const end = endUTC.toISOString();
         const { data, error } = await supabase.from('check_ins').select()
-        .gte('check_in_date', `${now} 00:00:00z`)
-        .lte('check_in_date', `${now} 23:59:59Z`)
+            .gte('check_in_date', start)
+            .lte('check_in_date', end)
         if (error) {
             const res: ApiResponse = {
                 message: 'Ocurrio un error al buscar las asistencias',
@@ -43,7 +49,7 @@ export async function POST(request: NextRequest) {
         const body = await request.json();
         const supabase = await createClient()
         
-        const { data, error } = await supabase.from('check_ins').insert(body);
+        const { data, error } = await supabase.from('check_ins').insert(body).select();
         if (error) {
             const res: ApiResponse = {
                 message: error?.message,
