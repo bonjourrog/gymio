@@ -40,5 +40,36 @@ export const useCheckin = () => {
             setIsLoading(false);
         }
     }
-    return {  getAllCheckin, isLoading }
+
+    const checkInCustomer = async (customer_id: string) => {
+        const now = new Date();
+        const timestamptzValue = now.toISOString();
+        const checkIn: Checkin = {
+            id: undefined!,
+            check_in_date: timestamptzValue,
+            customer_id
+        }
+        const res = await fetch('api/checkin',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(checkIn)
+            }
+        )
+        if (!res.ok) {
+            throw new Error(res.statusText)
+        }
+        const data: ApiResponse = await res.json();
+        if (!data.success) {
+            throw new Error(data.message)
+        }
+        const newCheckIn: Checkin = data.data[0];
+        const newCustomerCheckIns: CustomerCheckin[] = customerCheckIns.map(el => el.checkin.customer_id === newCheckIn.customer_id ?
+            { ...el, checkin: { ...newCheckIn } }
+            : el)
+        addCheckins(newCustomerCheckIns)
+    }
+    return { checkInCustomer, getAllCheckin, isLoading }
 }
