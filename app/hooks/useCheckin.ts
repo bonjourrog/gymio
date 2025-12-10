@@ -15,8 +15,6 @@ export const useCheckin = () => {
         setIsLoading(true);
         try {
             const res = await fetch('api/checkin', { method: "GET", headers: { "Content-Type": "application/json" } })
-            console.log(res);
-
             if (!res.ok) throw new Error(res.statusText);
             const data: ApiResponse = await res.json();
             if (!data.success) throw new Error(data.message)

@@ -4,8 +4,6 @@ import { ApiResponse } from "@/app/types/api";
 import { redirect } from "next/navigation";
 
 export async function login(formData: FormData) {
-    console.log('Serveeer action');
-
     const supabase = await createClient()
     const data = { email: formData.get('email') as string, password: formData.get('password') as string, }
     const { error, data: userData } = await supabase.auth.signInWithPassword(data)

@@ -44,11 +44,11 @@ export default function CheckinModal() {
             </label>
         </form>
         <ul className="flex flex-col gap-2 max-h-80 overflow-y-scroll transition-all duration-100 ease-in-out">
-            {input && filteredCustomers.map(customer => (
+            {input && filteredCustomers.map((customer, idx) => (
                 <li
                     onClick={()=>handleCheckin(customer.checkin)}
                     style={customer.checkin.check_in_date ? checkedStyle : undefined}
-                    key={`${customer.checkin.customer_id}`}
+                    key={`${customer.checkin.customer_id}-${idx}`}
                     className="relative flex gap-2 p-4 rounded-xl bg-zinc-50 cursor-pointer hover:bg-zinc-100 hover:ml-1 hover:border border-zinc-200 transition-all duration-100">
                     <span className="flex items-center justify-center w-12 h-12 p-2 rounded-md bg-zinc-800 text-white font-black">
                         {customer.customer_name[0].toUpperCase()}{customer.customer_name.split(" ")[1][0].toLocaleUpperCase()}

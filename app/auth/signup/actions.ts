@@ -30,7 +30,6 @@ export async function signup(formData: FormData) {
         }
     })
     if (error) {
-        console.log(error);
         if(error.code==='anonymous_provider_disabled' || error.code === 'validation_failed'){
             message = 'Verifique que los datos sean correctos'
         }else{
