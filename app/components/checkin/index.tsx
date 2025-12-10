@@ -38,7 +38,7 @@ export default function Checkin() {
                 </div>
             </label>
         </form>
-        <ul className="flex flex-col gap-2 max-h-60 overflow-y-scroll">
+        <ul className="flex flex-col gap-2 max-h-80 overflow-y-scroll transition-all duration-100 ease-in-out">
             {input && filteredCustomers.map(customer => (
                 <li
                     onClick={()=>handleCheckin(customer.checkin.customer_id)}
