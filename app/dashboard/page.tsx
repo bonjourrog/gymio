@@ -2,16 +2,18 @@
 
 import styles from './style.module.css';
 import { ArrowUpIcon, ChartArea, Check, CheckCircle2, DollarSign, Plus, TriangleAlert, Users2Icon } from "lucide-react";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import NewSubForm from '../components/newSubForm';
 import { useCheckin } from '../hooks/useCheckin';
 import Checkin from '../components/checkin';
 import { toast } from 'sonner';
+import { useCheckinStore } from '../store/checkin';
 
 export default function Home() {
     const [showForm, setShowForm] = useState<boolean>(false);
     const [showCheckin, setShowCheckin] = useState<boolean>(false);
-    const {getAllCheckin} = useCheckin()
+    const {getAllCheckin} = useCheckin();
+    const customerCheckIns = useCheckinStore(s=>s.customerCheckIns);
     
     const handleShowNewUserform = () => {
         setShowForm(true)
@@ -20,11 +22,13 @@ export default function Home() {
     const handleCheckin = async()=>{
         try {
             setShowCheckin(true)
-            await getAllCheckin()
+            await getAllCheckin();
         } catch (error) {
             toast.error("Error al cargar la lista de asistencia. Recargue la pagina")
         }
     }
+    console.log(customerCheckIns);
+    
 
     return <>
         {showForm?<div className='fixed inset-0 flex items-center justify-center w-[calc(100%-13em)] h-full bg-zinc-900/10 z-10'>
@@ -79,7 +83,7 @@ export default function Home() {
                 </li>
                 <li className={styles.gadget}>
                     <CheckCircle2 size={50} />
-                    <strong>6</strong>
+                    <strong>{customerCheckIns.filter(c=>c.checkin.check_in_date!=='').length}</strong>
                     <div>
                         <p>Check-in hoy</p>
                         <p>
