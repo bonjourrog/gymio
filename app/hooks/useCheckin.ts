@@ -21,7 +21,7 @@ export const useCheckin = () => {
             const data: ApiResponse = await res.json();
             if (!data.success) throw new Error(data.message)
 
-            const check_ins= new Map((data.data as Checkin[]).map(ci => [ci.customer_id, [ci.check_in_date, ci.id]]));
+            const check_ins = new Map((data.data as Checkin[]).map(ci => [ci.customer_id, [ci.check_in_date, ci.id]]));
             const filteredCustomers: CustomerCheckin[] = getCustomerWithMembership(customers)
                 .map(c => ({
                     customer_name: c.name,
@@ -71,5 +71,23 @@ export const useCheckin = () => {
             : el)
         addCheckins(newCustomerCheckIns)
     }
-    return { checkInCustomer, getAllCheckin, isLoading }
+
+    const removeCheckIn = async(check_in_id: string)=>{
+        const res = await fetch(`api/checkin/${check_in_id}`,
+            {
+                method:'DELETE',
+                headers:{'Content-Type':'application/json'}
+            }
+        );
+        if(!res.ok){
+            throw new Error(res.statusText);
+        }
+        const data:ApiResponse = await res.json();
+        if(!data.success){
+            throw new Error(data.message);
+        }
+        const newCustomerCheckIns = customerCheckIns.map(c=>c.checkin.id===check_in_id?{...c, checkin:{check_in_date:''}}:c) as CustomerCheckin[];
+        addCheckins(newCustomerCheckIns);
+    }
+    return { removeCheckIn, checkInCustomer, getAllCheckin, isLoading }
 }

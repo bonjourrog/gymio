@@ -1,3 +1,4 @@
+import { Checkin } from "@/app/entity/checkin";
 import { useCheckin } from "@/app/hooks/useCheckin";
 import { useCheckinStore } from "@/app/store/checkin";
 import {  LucideCheckCircle2, Search } from "lucide-react";
@@ -6,7 +7,7 @@ import { toast } from "sonner";
 
 export default function CheckinModal() {
     const customerCheckIns = useCheckinStore(s => s.customerCheckIns);
-    const {checkInCustomer}=useCheckin()
+    const {checkInCustomer, removeCheckIn}=useCheckin()
     const [input, setInput] = useState<string>('');
     const filteredCustomers = useMemo(() => {
         return customerCheckIns.filter(c => c.customer_name.toLowerCase().includes(input.toLowerCase()))
@@ -15,9 +16,13 @@ export default function CheckinModal() {
         border:'.1em solid #a7efa8',
         backgroundColor:'#f0fdf1'
     }
-    const handleCheckin = async (customer_id:string)=>{
+    const handleCheckin = async (checkin:Checkin)=>{
         try {
-            await checkInCustomer(customer_id)
+            if(!checkin.id){
+                await checkInCustomer(checkin.customer_id)
+            }else{
+                await removeCheckIn(checkin.id);
+            }
             toast.success("Asistencia tomada esxitosamente")
         } catch (error) {
             toast.error("Error al tomar asistencia")
@@ -41,7 +46,7 @@ export default function CheckinModal() {
         <ul className="flex flex-col gap-2 max-h-80 overflow-y-scroll transition-all duration-100 ease-in-out">
             {input && filteredCustomers.map(customer => (
                 <li
-                    onClick={()=>handleCheckin(customer.checkin.customer_id)}
+                    onClick={()=>handleCheckin(customer.checkin)}
                     style={customer.checkin.check_in_date ? checkedStyle : undefined}
                     key={`${customer.checkin.customer_id}`}
                     className="relative flex gap-2 p-4 rounded-xl bg-zinc-50 cursor-pointer hover:bg-zinc-100 hover:ml-1 hover:border border-zinc-200 transition-all duration-100">
