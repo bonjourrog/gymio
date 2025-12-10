@@ -23,8 +23,6 @@ export async function GET() {
                 type: 'server',
                 data: []
             }
-            console.log(error);
-            
             return NextResponse.json(res)
         }
         const res: ApiResponse = {
