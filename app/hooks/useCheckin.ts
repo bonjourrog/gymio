@@ -21,14 +21,14 @@ export const useCheckin = () => {
             const data: ApiResponse = await res.json();
             if (!data.success) throw new Error(data.message)
 
-            const check_ins = new Map((data.data as Checkin[]).map(ci => [ci.customer_id, ci.check_in_date]));
+            const check_ins= new Map((data.data as Checkin[]).map(ci => [ci.customer_id, [ci.check_in_date, ci.id]]));
             const filteredCustomers: CustomerCheckin[] = getCustomerWithMembership(customers)
                 .map(c => ({
                     customer_name: c.name,
                     package_name: c.membership_customers?.[0]?.memberships?.packages?.name!,
                     checkin: {
-                        id: '',
-                        check_in_date: check_ins.get(c.id!) || '',
+                        id: check_ins.get(c.id!)?.[1] || '',
+                        check_in_date: check_ins.get(c.id!)?.[0] || '',
                         customer_id: c.id!
                     }
                 }))
