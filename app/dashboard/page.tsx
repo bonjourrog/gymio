@@ -2,12 +2,12 @@
 
 import styles from './style.module.css';
 import { ArrowUpIcon, ChartArea, Check, CheckCircle2, DollarSign, Plus, TriangleAlert, Users2Icon } from "lucide-react";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import NewSubForm from '../components/newSubForm';
 import { useCheckin } from '../hooks/useCheckin';
-import Checkin from '../components/checkin';
 import { toast } from 'sonner';
 import { useCheckinStore } from '../store/checkin';
+import CheckinModal from '../components/checkin';
 
 export default function Home() {
     const [showForm, setShowForm] = useState<boolean>(false);
@@ -27,8 +27,6 @@ export default function Home() {
             toast.error("Error al cargar la lista de asistencia. Recargue la pagina")
         }
     }
-    console.log(customerCheckIns);
-    
 
     return <>
         {showForm?<div className='fixed inset-0 flex items-center justify-center w-[calc(100%-13em)] h-full bg-zinc-900/10 z-10'>
@@ -37,7 +35,7 @@ export default function Home() {
         {showCheckin?<div 
         onClick={(e)=>e.target === e.currentTarget && setShowCheckin(false)}
         className='fixed top-0 lef-0 flex items-center justify-center w-[calc(100%-13em)] h-full bg-zinc-900/10 z-10'>
-            <Checkin/>
+            <CheckinModal/>
         </div>:null}
         <section className={styles.home}>
             <ul className="grid grid-cols-3 pt-10 gap-10">

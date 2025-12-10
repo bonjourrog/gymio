@@ -4,7 +4,7 @@ import {  LucideCheckCircle2, Search } from "lucide-react";
 import { CSSProperties, useMemo, useState } from "react";
 import { toast } from "sonner";
 
-export default function Checkin() {
+export default function CheckinModal() {
     const customerCheckIns = useCheckinStore(s => s.customerCheckIns);
     const {checkInCustomer}=useCheckin()
     const [input, setInput] = useState<string>('');
