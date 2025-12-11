@@ -12,7 +12,7 @@ export async function DELETE(request: Request, { params }: { params: RouteParams
         if (!id) {
             return NextResponse.json({ success: false, message: 'No se recibió ID' }, { status: 400 });
         }
-        const { data, error } = await supabase.from('packages').delete().eq('id', id)
+        const { data, error } = await supabase.rpc('archive_package',{p_id:id});
 
         if (error) {
             const res: ApiResponse = {
