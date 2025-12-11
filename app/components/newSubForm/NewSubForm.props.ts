@@ -1,0 +1,1 @@
+type NewSubFormProps = { onClose: () => void };
