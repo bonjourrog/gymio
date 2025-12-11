@@ -29,8 +29,8 @@ export default function Home() {
     }
 
     return <>
-        {showForm?<div className='fixed inset-0 flex items-center justify-center w-[calc(100%-13em)] h-full bg-zinc-900/10 z-10'>
-            <NewSubForm/>
+        {showForm?<div className='fixed inset-0 flex items-center justify-center w-screen h-full bg-zinc-900/10 z-10'>
+            <NewSubForm onClose={()=>setShowForm(false)}/>
         </div>:null}
         {showCheckin?<div 
         onClick={(e)=>e.target === e.currentTarget && setShowCheckin(false)}

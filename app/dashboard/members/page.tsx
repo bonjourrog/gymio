@@ -2,7 +2,6 @@
 
 import NewSubForm from "@/app/components/newSubForm";
 import { Plus } from "lucide-react";
-import { useState } from "react"
 import MembersList from "./components/membersList";
 import { MembersProvider, useMembersContext } from "./membersContext";
 export default function MembersPage() {
@@ -14,12 +13,12 @@ export default function MembersPage() {
 }
 function MembersContent() {
     // const [showNewSubForm, setShowNewSubForm] = useState<boolean>(false);
-    const {showNewSubForm, opeNewSubForm} = useMembersContext()
+    const {showNewSubForm, closeNewSubForm, opeNewSubForm} = useMembersContext()
 
     return <section className="p-10 pt-0 h-screen max-w-[calc(100vw-260px)]">
         {
             showNewSubForm ? <div className="fixed left-0 top-0 flex items-center justify-center h-screen w-screen bg-zinc-950/20 z-10">
-                <NewSubForm />
+                <NewSubForm onClose={closeNewSubForm}/>
             </div> : undefined
         }
         {/* {
