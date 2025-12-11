@@ -4,7 +4,7 @@ import { ApiResponse } from '@/app/types/api';
 
 export async function GET(request: Request) {
     try {
-        const { data: packages, error } = await supabase.from('packages').select()
+        const { data: packages, error } = await supabase.from('packages').select().eq('is_active',true)
         if (error) {
             const res: ApiResponse = {
                 success: false,
