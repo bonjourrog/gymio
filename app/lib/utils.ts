@@ -21,5 +21,7 @@ export const getMembershipColor = (colorMap: Record<string, string>, membershipI
 }
 export const getCustomerWithMembership = (customers: Customer[]):Customer[] => {
     const allowedStatuses = ['active', 'expired'];
-    return customers.filter(c => allowedStatuses.includes(c.membership_customers?.[0]?.memberships?.status as string));
+    return customers.filter(c => c.membership_customers?.some(mc=>(
+        allowedStatuses.includes(mc.memberships?.status as string)
+    )));
 }
