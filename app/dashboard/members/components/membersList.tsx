@@ -8,18 +8,28 @@ import dayjs from 'dayjs';
 import { useMemo } from 'react';
 export default function MembersList() {
     const { customers } = useCustomerStore();
-    // Agrupar clientes por ID de membresía
-    const customerList = useMemo(() => {
-        const allowedStatuses = ['active', 'expired'];
-        return customers.filter(c=>allowedStatuses.includes(c.membership_customers?.[0]?.memberships?.status as string)).reduce((acc, customer) => {
-            // Obtén el ID de la membresía
-            const membresia = customer.membership_customers?.[0]?.memberships?.id || "Sin membresía";
-            if (!acc[membresia]) acc[membresia] = [];
-            acc[membresia].push(customer);
-            return acc;
-        }, {} as Record<string, Customer[]>);
+    const allowedStatuses = ['active', 'expired'];
 
-    }, [customers])
+    const customerList = useMemo(() => {
+        return customers
+            .filter(c =>
+                c.membership_customers?.some(mc =>
+                    allowedStatuses.includes(mc.memberships?.status as string)
+                )
+            )
+            .reduce((acc, customer) => {
+                const activeMembership = customer.membership_customers?.find(mc =>
+                    allowedStatuses.includes(mc.memberships?.status as string)
+                );
+
+                const membresia =
+                    activeMembership?.memberships?.id || 'Sin membresía';
+
+                if (!acc[membresia]) acc[membresia] = [];
+                acc[membresia].push(customer);
+                return acc;
+            }, {} as Record<string, Customer[]>);
+    }, [customers]);
 
     return <section className={styles['table-wrapper']}>
         {Object.entries(customerList).map(([membershipId, members]) => (
@@ -40,9 +50,9 @@ export default function MembersList() {
                             <td>{handlePriceFormat(`${members[0].membership_customers?.[0]?.memberships?.packages?.price}`)}</td>
                             <td>{spanishFormat(dayjs(members[0].membership_customers?.[0]?.memberships?.start_date))}</td>
                             <td style={{ padding: '1em' }}>{
-                                membershipId === "Sin membresía" ? 
-                                <p className='border w-fit px-2 py-1 font-medium rounded-lg'>{membershipId}</p> 
-                                :<MembershipStatus key={membershipId} membership={members[0].membership_customers?.[0]?.memberships} />
+                                membershipId === "Sin membresía" ?
+                                    <p className='border w-fit px-2 py-1 font-medium rounded-lg'>{membershipId}</p>
+                                    : <MembershipStatus key={membershipId} membership={members[0].membership_customers?.[0]?.memberships} />
                             }</td>
                             <td className='flex items-center gap-2'>{dayjs(members[0].membership_customers?.[0]?.memberships?.end_date).diff(dayjs(), 'day')}</td>
                         </tr>
