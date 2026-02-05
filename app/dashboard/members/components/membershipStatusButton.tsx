@@ -4,7 +4,6 @@ import { useMembership } from "@/app/hooks/useMembership";
 import { memo, useEffect, useState } from "react";
 import styles from "../styles.module.css";
 import { toast } from "sonner";
-import { useMembersContext } from "../membersContext";
 import { Customer } from "@/app/entity/customer";
 import { MembershipPayload } from "@/app/entity/membershipPayload";
 import dayjs from "dayjs";
