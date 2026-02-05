@@ -1,15 +1,20 @@
 import type { MembershipStatus } from "@/app/data/membership";
 import { Membership } from "@/app/entity/membership";
 import { useMembership } from "@/app/hooks/useMembership";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import styles from "../styles.module.css";
 import { toast } from "sonner";
 import { useMembersContext } from "../membersContext";
+import { Customer } from "@/app/entity/customer";
+import { MembershipPayload } from "@/app/entity/membershipPayload";
+import dayjs from "dayjs";
+import { useUser } from "@/app/hooks/useUser";
 
-function MembershipStatus({ membership }: { membership?: Membership | undefined }) {
-    const {opeNewSubForm} = useMembersContext();
+function MembershipStatus({ customer }: { customer?: Customer[] | undefined }) {
+    const [membership, setMembership] = useState<Membership | undefined>(undefined);
+    const {getUsers} = useUser();
     const [showMenu, setShowMenu] = useState<boolean>(false);
-    const { updateMembership, loading } = useMembership();
+    const { updateMembership, registerMembership, loading } = useMembership();
 
     const translateStatus = (status: string) => {
         let content = { text: '', styles: '' };
@@ -53,6 +58,34 @@ function MembershipStatus({ membership }: { membership?: Membership | undefined 
             toast.error(`Error al actualizar el estado: ${error.message}`);
         }
     }
+    const renewMembership = async () => {
+        try {
+            await updateStatus('canceled')
+            const ids: string[] = customer?.map(c => c.id!)!;
+            const todayDate = dayjs().format('YYYY-MM-DD')
+            const end_date = dayjs(todayDate).add(membership?.packages?.duration_days!, 'day').format('YYYY-MM-DD')
+
+            const newMembership: Membership = {
+                status: 'active',
+                start_date: todayDate,
+                package_id: membership?.packages?.id!,
+                end_date: end_date
+            }
+            const payload: MembershipPayload = {
+                ids,
+                membership: newMembership
+            }
+            const res = await registerMembership(payload)
+            if (res.error) throw new Error(res.message);
+            await getUsers();
+            toast.success('Membresía renovada con éxito');
+        } catch (error: any) {
+            toast.error(`Error al actualizar renovar membresia, recargue la pagina: ${error.message}`);
+        }
+    }
+    useEffect(() => {
+        setMembership(customer?.[0]?.membership_customers?.[0]?.memberships)
+    }, [])
     return <>
         {showMenu && <div onClick={() => setShowMenu(false)} className={`fixed w-screen h-screen top-0 left-0 ${loading ? 'z-20' : 'z-10'} bg-zinc-900/30`}>
         </div>}
@@ -72,7 +105,7 @@ function MembershipStatus({ membership }: { membership?: Membership | undefined 
                             <span onClick={(e)=>{
                                 e.stopPropagation()
                                 setShowMenu(false)
-                                opeNewSubForm()
+                                renewMembership()
                             }} key={'active'} className={`py-2 px-6 rounded-md text-sm font-bold ${translateStatus('active').styles}`}>Activar</span>
 
                             <span onClick={() => updateStatus('canceled')} key={'canceled'} className={`py-2 px-6 rounded-md text-sm font-bold ${translateStatus('canceled').styles}`}>Cancelar</span>
