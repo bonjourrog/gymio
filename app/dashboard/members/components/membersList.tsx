@@ -17,20 +17,21 @@ export default function MembersList() {
                     allowedStatuses.includes(mc.memberships?.status as string)
                 )
             )
-            .reduce((acc, customer) => {
-                const activeMembership = customer.membership_customers?.find(mc =>
+            .map(customer => ({
+                ...customer,
+                membership_customers: customer.membership_customers?.filter(mc =>
                     allowedStatuses.includes(mc.memberships?.status as string)
-                );
-
-                const membresia =
-                    activeMembership?.memberships?.id || 'Sin membresía';
+                ) ?? []
+            }))
+            .reduce((acc, customer) => {
+                const activeMembership = customer.membership_customers?.[0];
+                const membresia = activeMembership?.memberships?.id || 'Sin membresía';
 
                 if (!acc[membresia]) acc[membresia] = [];
                 acc[membresia].push(customer);
                 return acc;
             }, {} as Record<string, Customer[]>);
-    }, [customers]);
-
+    }, [customers, allowedStatuses]);
     return <section className={styles['table-wrapper']}>
         {Object.entries(customerList).map(([membershipId, members]) => (
             <div key={membershipId}>
@@ -52,7 +53,7 @@ export default function MembersList() {
                             <td style={{ padding: '1em' }}>{
                                 membershipId === "Sin membresía" ?
                                     <p className='border w-fit px-2 py-1 font-medium rounded-lg'>{membershipId}</p>
-                                    : <MembershipStatus key={membershipId} membership={members[0].membership_customers?.[0]?.memberships} />
+                                    : <MembershipStatus key={membershipId} customer={members} />
                             }</td>
                             <td className='flex items-center gap-2'>{dayjs(members[0].membership_customers?.[0]?.memberships?.end_date).diff(dayjs(), 'day')}</td>
                         </tr>
@@ -76,3 +77,7 @@ export default function MembersList() {
         ))}
     </section>;
 }
+
+
+
+
