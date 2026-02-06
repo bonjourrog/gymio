@@ -1,7 +1,7 @@
 import { Customer } from "@/app/entity/customer"
 import { handlePriceFormat, spanishFormat } from "@/app/lib/formatting"
 import { Phone } from "lucide-react"
-import membershipStatus from "./membershipStatusButton"
+import MembershipStatus from "./membershipStatusButton"
 import dayjs from "dayjs"
 import { useCustomerStore } from "@/app/store/customerStore"
 
@@ -40,7 +40,7 @@ export default function MembershipTable({ getMembershipColor}:{
                                 </span>
                             </td>
                             <th className="font-light">{spanishFormat(dayjs(c?.membership_customers?.[0]?.memberships?.start_date))}</th>
-                            {membershipStatus(c.membership_customers?.[0]?.memberships)}
+                            <MembershipStatus customer={[c]} />
                             <td>{c.membership_customers?.[0]?.memberships?.packages?.name}</td>
                             <th>{handlePriceFormat(`${c.membership_customers?.[0]?.memberships?.packages?.price}`)}</th>
                             {/* <th><span className="bg-zinc-700 text-white rounded-lg px-4 py-2 font-light">Pagar</span></th> */}

@@ -1,7 +1,6 @@
 .table-wrapper {
     max-height: calc(100% - 11em);
     margin-top: 20px;
-    overflow: hidden;
     border-radius: 1em;
     overflow: auto;
     font-size: .9em;

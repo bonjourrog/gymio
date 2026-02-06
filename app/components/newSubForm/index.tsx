@@ -21,29 +21,30 @@ import { Membership } from '@/app/entity/membership';
 import { useMembership } from '@/app/hooks/useMembership';
 import { MembershipPayload } from '@/app/entity/membershipPayload';
 
-export default function NewSubForm({onClose}:NewSubFormProps) {
+export default function NewSubForm({ onClose }: NewSubFormProps) {
     const { packages } = usePackages(true)
-    const {registerUser} = useUser()
+    const { registerUser } = useUser()
     const [user, setUser] = useState<Customer>({ name: '', phone: '' } as Customer);
     const { customers } = useCustomerStore();
     const [newCustomers, setNewCustomers] = useState<Customer[]>([])
     const [packageSelected, setPackageSelected] = useState<Package>(emptyPackge);
     const [date, setDate] = useState<string>('');
-    const {registerMembership} = useMembership();
+    const { registerMembership } = useMembership();
 
     const filteredUsers = useMemo(() => {
+        const allowedStatuses = ['active'];
         const q = user?.name?.trim().toLowerCase() ?? "";
         if (!q) return customers;
+
         return customers.filter(c => {
-            const status = c.membership_customers?.[0]?.memberships?.status;
-            return (c?.name ?? "").toLowerCase().includes(q)
-            && (status === 'canceled' || !status || status === 'expired')
-        }
-        );
+            const sinMembresias = !c.membership_customers || c.membership_customers.length === 0;
+
+            return sinMembresias && (c?.name ?? "").toLowerCase().includes(q);
+        });
     }, [user?.name, customers]);
 
     const handleOnCahnge = (event: ChangeEvent<HTMLInputElement>) => {
-        let {value, name:field} = event.currentTarget
+        let { value, name: field } = event.currentTarget
         if (field === 'phone') {
             if (value.length > 12) {
                 return
@@ -55,43 +56,43 @@ export default function NewSubForm({onClose}:NewSubFormProps) {
     const handleOnSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
-            if (!packageSelected.name){
+            if (!packageSelected.name) {
                 toast.warning('Seleccione un paquete')
                 return
             }
-            if(!date){
+            if (!date) {
                 toast.warning('Seleccione la fecha de inicio')
                 return
             }
-            if(newCustomers.length==0){
+            if (newCustomers.length == 0) {
                 toast.warning('Agregue cliente para continuar')
                 return
             }
-            let customersIds:string[] = []
-            const customers = newCustomers.filter(customer=>customer.id==='').map(({id, ...rest})=>({...rest, owner_id:user.id}));
-            customersIds = [...customersIds, ...newCustomers.filter(c=>c.id!=='').map(({id})=>id!)]
-            if(customers.length>0){
+            let customersIds: string[] = []
+            const customers = newCustomers.filter(customer => customer.id === '').map(({ id, ...rest }) => ({ ...rest, owner_id: user.id }));
+            customersIds = [...customersIds, ...newCustomers.filter(c => c.id !== '').map(({ id }) => id!)]
+            if (customers.length > 0) {
                 const res = await registerUser(customers);
-                if(res.error){
+                if (res.error) {
                     toast.error(res.message)
                     return
                 }
-                const data:Customer[] = res.data;
-                customersIds = [...customersIds, ...data.map(({id})=>id!)]
+                const data: Customer[] = res.data;
+                customersIds = [...customersIds, ...data.map(({ id }) => id!)]
             }
             const end_date = dayjs(date).add(packageSelected.duration_days, 'day').format('YYYY-MM-DD')
-            const membership:Membership = {
-                status:'active',
-                start_date:date,
-                package_id:packageSelected.id!,
-                end_date:end_date
+            const membership: Membership = {
+                status: 'active',
+                start_date: date,
+                package_id: packageSelected.id!,
+                end_date: end_date
             }
-            const payload:MembershipPayload = {
+            const payload: MembershipPayload = {
                 membership,
-                ids:customersIds
+                ids: customersIds
             }
             const response = await registerMembership(payload);
-            if(response.error)throw new Error(response.message)
+            if (response.error) throw new Error(response.message)
             onClose();
 
         } catch (err) {
@@ -119,17 +120,15 @@ export default function NewSubForm({onClose}:NewSubFormProps) {
             toast.warning('Ingresa un numero diferente')
             return
         }
-
         if (!customer.id) {
             customer.id = ""
         }
         setNewCustomers([...newCustomers, { name: customer.name, phone: customer.phone, id: customer.id }])
         setUser({ name: '', phone: '' })
-
     }
     const onChange: DatePickerProps['onChange'] = (date) => {
         setDate(date.format('YYYY-MM-DD'))
-    };
+    }
     return packages?.length > 0 ? <form onSubmit={handleOnSubmit} className={styles.form}>
         <PackagesList packageSelected={packageSelected} setPackageSelected={setPackageSelected} setNewCustomers={setNewCustomers} />
         {
