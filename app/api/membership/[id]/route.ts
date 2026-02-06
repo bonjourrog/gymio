@@ -6,7 +6,7 @@ import { ApiResponse } from "@/app/types/api";
 interface RouteParams {
     id: string;
 }
-export async function PUT(request: Request, { params }: { params: RouteParams }) {
+export async function PUT(request: Request, { params }: { params: Promise<RouteParams> }) {
     try {
         const supabaseServer = await createClient()
         const { data: { user } } = await supabaseServer.auth.getUser();

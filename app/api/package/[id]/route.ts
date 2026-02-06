@@ -6,7 +6,7 @@ interface RouteParams {
     id: string;
 }
 
-export async function DELETE(request: Request, { params }: { params: RouteParams }) {
+export async function DELETE(request: Request, { params }: { params: Promise<RouteParams> }) {
     try {
         const { id } = await params;
         if (!id) {
@@ -39,7 +39,7 @@ export async function DELETE(request: Request, { params }: { params: RouteParams
         return NextResponse.json(res, { status: 500 })
     }
 }
-export async function PUT(req: Request, { params }: { params: RouteParams }) {
+export async function PUT(req: Request, { params }: { params: Promise<RouteParams> }) {
     try {
         const { id } = await params;
         const body = await req.json()

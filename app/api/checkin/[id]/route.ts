@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 interface RouteParams {
     id: string;
 }
-export async function DELETE(request: Request ,{params}: {params:RouteParams} ) {
+export async function DELETE(request: Request, { params }: { params: Promise<RouteParams> }) {
     try {
         const {id} = await params;
         const { data, error } = await supabase.from('check_ins').delete().eq('id', id);
