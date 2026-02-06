@@ -1,8 +1,9 @@
 'use client'
 import { Mail } from "lucide-react";
 import { useSearchParams } from "next/navigation"
+import { Suspense } from "react";
 
-export default function ActivatePage() {
+function ActivateContent() {
     const searchParams = useSearchParams()
     const email = searchParams.get('email') || '';
     return <main className="flex flex-col items-center justify-center h-screen">
@@ -86,4 +87,12 @@ export default function ActivatePage() {
             Por favor, revisa tu correo y haz clic en el enlace para activar tu cuenta antes de iniciar sesión.
         </p> */}
     </main>
+}
+
+export default function ActivatePage() {
+    return (
+        <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
+            <ActivateContent />
+        </Suspense>
+    );
 }
