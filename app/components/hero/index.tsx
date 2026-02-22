@@ -10,29 +10,29 @@ export default function Hero() {
             priority
             className="object-cover"
         />
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="absolute bottom-0 left-0 h-[calc(100%-6rem)] flex justify-center flex-col gap-10 pl-20 z-10 w-[55rem] text-white">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-bg-black/50  to-black/50 " />
+        <div className="absolute bottom-0 left-0 h-[calc(100%-6rem)] flex justify-center flex-col gap-6 pl-20 z-10 w-200 text-white">
             <h3 className="flex items-center gap-2 bg-white/25 w-fit rounded-full px-4 py-2 font-bold">
                 <Rocket/>
                 Sistema mvp en desarrollo
             </h3>
-            <h1 className="text-8xl font-bold">Gestiona tu gimnasio de forma inteligente</h1>
-            <p className="text-2xl">Simplifica el check-in, administra suscripciones y paquetes en una sola plataforma moderna. </p>
-            <div className="flex gap-4 font-bold">
+            <h1 className="text-6xl font-bold">Gestiona tu gimnasio de forma inteligente</h1>
+            <p>Simplifica el check-in, administra suscripciones y paquetes en una sola plataforma moderna. </p>
+            <div className="flex gap-4 font-bold mt-10">
                 <button className="py-4 px-10 rounded-full  bg-white text-zinc-800">Prueba gratis 1 mes</button>
                 <button className="py-4 px-10 rounded-full border-2 border-white text-white">DEMO</button>
             </div>
-            <ul className="flex gap-6">
-                <li className="text-center">
-                    <strong className="font-bold text-4xl">98%</strong>
+            <ul className="flex gap-6 mt-20">
+                <li>
+                    <strong className="font-bold text-6xl">98%</strong>
                     <p>Satisfacción</p>
                 </li>
-                <li className="text-center">
-                    <strong className="font-bold text-4xl">500+</strong>
+                <li>
+                    <strong className="font-bold text-6xl">500+</strong>
                     <p>Check-ins diarios</p>
                 </li>
-                <li className="text-center">
-                    <strong className="font-bold text-4xl">24/7</strong>
+                <li>
+                    <strong className="font-bold text-6xl">24/7</strong>
                     <p>Soporte</p>
                 </li>
             </ul>
