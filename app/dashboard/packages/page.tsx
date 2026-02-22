@@ -109,7 +109,7 @@ export default function Packages() {
                                 </ul>
                             </div>
                             <div className="flex gap-4 justify-between">
-                                <button onClick={() => handleEditPackage(pkg.id!)} className="w-full p-2 rounded-lg text-blue-400 bg-blue-50 cursor-pointer">Editar</button>
+                                {/* <button onClick={() => handleEditPackage(pkg.id!)} className="w-full p-2 rounded-lg text-blue-400 bg-blue-50 cursor-pointer">Editar</button> */}
                                 <button onClick={() => setComfirmDelete(pkg.id!)} className="w-full text-red-400 bg-red-100 p-2 rounded-lg cursor-pointer">Eliminar</button>
                             </div>
                         </li>
