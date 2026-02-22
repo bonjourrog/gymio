@@ -43,7 +43,6 @@ form label {
   max-width: 100%;
   max-height: calc(100% - 10em);
   padding: 2em;
-  border: .1em solid rgb(232, 232, 232);
   border-radius: 1em;
   -webkit-overflow-scrolling: touch;
   overflow: scroll;
@@ -94,13 +93,12 @@ form label {
   transition: all .2s ease-in-out;
 }
 
-.table-wrapper tbody tr:hover {
+/* .table-wrapper tbody tr:hover {
   cursor: pointer;
-  transform: scale(1.01);
-}
+} */
 
 .table-wrapper tbody tr:hover::after {
-  background-image: linear-gradient(to right, rgb(240, 240, 240), rgb(244, 244, 244), rgb(255, 255, 255));
+  cursor: pointer;
 }
 
 table thead th {

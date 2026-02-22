@@ -9,7 +9,7 @@ import { MembershipPayload } from "@/app/entity/membershipPayload";
 import dayjs from "dayjs";
 import { useUser } from "@/app/hooks/useUser";
 
-function MembershipStatus({ customer }: { customer?: Customer[] | undefined }) {
+function MembershipStatus({ customer, chip =  false }: { customer?: Customer[] | undefined, chip?: boolean }) {
     const [membership, setMembership] = useState<Membership | undefined>(undefined);
     const {getUsers} = useUser();
     const [showMenu, setShowMenu] = useState<boolean>(false);
@@ -96,7 +96,7 @@ function MembershipStatus({ customer }: { customer?: Customer[] | undefined }) {
             <div className={styles["sk-chase-dot"]}></div>
             <div className={styles["sk-chase-dot"]}></div>
         </div>}
-        <span onClick={() => setShowMenu(true)} className={`${translateStatus(membership?.status!).styles} relative rounded-lg px-4 py-2 font-light cursor-pointer`}>
+        <span onClick={() => !chip && setShowMenu(true)} className={`${translateStatus(membership?.status!).styles} relative rounded-lg px-4 py-2 font-light cursor-pointer`}>
             {
                 showMenu && <div className="absolute left-0 -top-6 flex flex-col gap-2 min-w-20 min-h-20 bg-white rounded-xl p-4 z-20 text-zinc-700">
                     {
