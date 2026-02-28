@@ -1,0 +1,278 @@
+/* ─────────────────────────────────────────
+   WRAPPER
+───────────────────────────────────────── */
+.listWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.25rem 0 1rem;
+    overflow-y: auto;
+}
+
+/* ─────────────────────────────────────────
+   GROUP CARD
+───────────────────────────────────────── */
+.group {
+    border-radius: 12px;
+    border: 1px solid #e4e4e7;
+    background: #ffffff;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+/* ── Header row ── */
+.groupHeader {
+    display: flex;
+    align-items: stretch;
+    background: #fafafa;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* The colored left accent bar */
+.groupAccent {
+    width: 3px;
+    min-width: 3px;
+    background: #22c55e;
+    border-radius: 0;
+    flex-shrink: 0;
+}
+
+.groupCols {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0;
+    padding: 0.85rem 1.25rem;
+}
+
+.groupCol {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    flex: 1;
+    min-width: 100px;
+    padding-right: 1rem;
+}
+
+.colLabel {
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: #a1a1aa;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+.colValue {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #18181b;
+    white-space: nowrap;
+}
+
+/* ── Members list ── */
+.memberList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.memberRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 1.25rem 0.6rem 1.5rem;
+    border-bottom: 1px solid #fafafa;
+    transition: background 0.13s;
+}
+
+.memberRow:last-child {
+    border-bottom: none;
+}
+
+.memberRow:hover {
+    background: #fafafa;
+}
+
+.memberLeft {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    min-width: 0;
+    margin-left: 2em;
+}
+
+.memberAvatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    border-radius: 50%;
+    background: #f4f4f5;
+    border: 1px solid #e4e4e7;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #52525b;
+    flex-shrink: 0;
+}
+
+.memberName {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.82rem;
+    font-style: italic;
+    color: #3f3f46;
+    min-width: 120px;
+}
+
+.memberPhone {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.82rem;
+    color: #71717a;
+}
+
+.memberIcon {
+    color: #a1a1aa;
+    flex-shrink: 0;
+}
+
+
+/* ─────────────────────────────────────────
+   ATTENDANCE DOT
+───────────────────────────────────────── */
+.attendanceDot {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.28rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.22em 0.55em;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.dotPresent {
+    background: rgba(22, 163, 74, 0.09);
+    color: #15803d;
+    border: 1px solid rgba(22, 163, 74, 0.2);
+}
+
+.dotAbsent {
+    background: rgba(113, 113, 122, 0.07);
+    color: #a1a1aa;
+    border: 1px solid rgba(113, 113, 122, 0.13);
+}
+
+
+/* ─────────────────────────────────────────
+   STATUS CHIP  (same system as membersTable)
+───────────────────────────────────────── */
+.statusChip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.28rem;
+    font-size: 0.71rem;
+    font-weight: 600;
+    padding: 0.25em 0.6em;
+    border-radius: 20px;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    width: fit-content;
+}
+
+.status_active   { background: rgba(22,163,74,0.09);   color: #15803d; border: 1px solid rgba(22,163,74,0.22);   }
+.status_expiring { background: rgba(245,158,11,0.09);  color: #b45309; border: 1px solid rgba(245,158,11,0.25);  }
+.status_expired  { background: rgba(239,68,68,0.08);   color: #b91c1c; border: 1px solid rgba(239,68,68,0.2);    }
+.status_cancelled{ background: rgba(113,113,122,0.08); color: #52525b; border: 1px solid rgba(113,113,122,0.18); }
+
+
+/* ─────────────────────────────────────────
+   DAYS REMAINING BADGE
+───────────────────────────────────────── */
+.daysBadge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.15em 0.5em;
+    border-radius: 6px;
+    width: fit-content;
+}
+
+.daysNormal {
+    color: #18181b;
+}
+
+.daysUrgent {
+    background: rgba(239, 68, 68, 0.08);
+    color: #b91c1c;
+    border: 1px solid rgba(239, 68, 68, 0.18);
+}
+
+.daysNull {
+    color: #a1a1aa;
+    font-size: 0.8rem;
+}
+
+
+/* ─────────────────────────────────────────
+   EMPTY STATE
+───────────────────────────────────────── */
+.empty {
+    text-align: center;
+    color: #a1a1aa;
+    font-size: 0.85rem;
+    padding: 2.5rem 0;
+}
+
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────── */
+.hideMobile {
+    /* visible by default, hidden on small screens */
+}
+
+@media screen and (max-width: 640px) {
+    .hideMobile {
+        display: none;
+    }
+
+    .groupCols {
+        padding: 0.75rem 1rem;
+        gap: 0.5rem;
+    }
+
+    .groupCol {
+        min-width: 80px;
+    }
+
+    .memberRow {
+        padding: 0.6rem 1rem;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+
+    .memberLeft {
+        gap: 0.5rem;
+    }
+
+    .memberName {
+        min-width: unset;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .memberPhone {
+        display: none;
+    }
+}
