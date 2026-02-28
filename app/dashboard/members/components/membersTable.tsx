@@ -397,7 +397,7 @@ export default function MembershipTable({ getMembershipColor }: {
                                 <td><StatusChip customer={c} /></td>
                                 <td className={styles.planCell}>{c.membership_customers?.[0]?.memberships?.packages?.name}</td>
                                 <td className={styles.priceCell}>{handlePriceFormat(`${c.membership_customers?.[0]?.memberships?.packages?.price}`)}</td>
-                                <td><AttendanceChip customerId={c.id} /></td>
+                                <td><AttendanceChip customerId={c.id!} /></td>
                                 {/* Check-in button — stopPropagation so it doesn't open the detail modal */}
                                 <td onClick={(e) => e.stopPropagation()}>
                                     <button
