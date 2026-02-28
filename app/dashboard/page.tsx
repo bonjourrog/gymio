@@ -8,12 +8,15 @@ import { useCheckin } from '../hooks/useCheckin';
 import { toast } from 'sonner';
 import { useCheckinStore } from '../store/checkin';
 import CheckinModal from '../components/checkin';
+import MembershipTable from './members/components/membersTable';
+import { getMembershipColor } from '../lib/utils';
 
 export default function Home() {
     const [showForm, setShowForm] = useState<boolean>(false);
     const [showCheckin, setShowCheckin] = useState<boolean>(false);
     const {getAllCheckin} = useCheckin();
     const customerCheckIns = useCheckinStore(s=>s.customerCheckIns);
+    const getColorForTable = (membershipId?: string) => getMembershipColor({}, membershipId)
     
     const handleShowNewUserform = () => {
         setShowForm(true)
@@ -38,31 +41,31 @@ export default function Home() {
             <CheckinModal/>
         </div>:null}
         <section className={styles.home}>
-            <ul className="grid grid-cols-3 pt-10 gap-10">
+            <ul className="grid grid-cols-3 gap-10">
                 <li>
                     <button onClick={handleShowNewUserform} className={styles.action}>
-                        <Plus size={30} />
+                        <Plus size={20} />
                         <div>
-                            <p className={styles['action__headline']}>Nueva suscripción</p>
-                            <p>Registra Suscripción</p>
+                            <p className={styles.action__headline}>Nueva suscripción</p>
+                            {/* <p>Registra Suscripción</p> */}
                         </div>
                     </button>
                 </li>
                 <li onClick={handleCheckin}>
                     <button className={styles.action}>
-                        <Check size={30} />
+                        <Check size={20} />
                         <div>
-                            <p className={styles['action__headline']}>Check-in</p>
-                            <p>Registrar Asistencia</p>
+                            <p className={styles.action__headline}>Check-in</p>
+                            {/* <p>Registrar Asistencia</p> */}
                         </div>
                     </button>
                 </li>
                 <li>
                     <button className={styles.action}>
-                        <DollarSign size={30} />
+                        <DollarSign size={20} />
                         <div>
-                            <p className={styles['action__headline']}>Registrar Pago</p>
-                            <p>Registrar Pago</p>
+                            <p className={styles.action__headline}>Registrar Pago</p>
+                            {/* <p>Registrar Pago</p> */}
                         </div>
                     </button>
                 </li>
@@ -112,10 +115,12 @@ export default function Home() {
                     </div>
                 </li>
             </ul>
+            
             <div className={styles.table}>
                 <h2 className='font-extrabold border-l-2 border-zinc-700 text-2xl pl-6'>Miembros</h2>
                 <hr />
-                <table>
+                <MembershipTable getMembershipColor={getColorForTable}/>
+                {/* <table>
                     <thead className='rounded-2xl'>
                         <tr>
                             <th>Nombre</th>
@@ -155,7 +160,7 @@ export default function Home() {
                             <th>Pagar</th>
                         </tr>
                     </tbody>
-                </table>
+                </table> */}
             </div>
         </section>
     </>
