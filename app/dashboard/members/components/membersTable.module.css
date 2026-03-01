@@ -83,27 +83,36 @@
    TABLE ROW
 ───────────────────────────────────────── */
 .tableRow {
-    cursor: pointer;
+    /* No cursor or click handler on the row itself — iOS Safari fix */
     transition: background 0.15s;
-    outline: none;
 }
 
 .tableRow:hover {
     background: #f9f9fa;
 }
 
-.tableRow:focus-visible {
-    outline: 2px solid rgba(79, 70, 229, 0.35);
-    outline-offset: -2px;
-}
-
-/* ── Name cell ── */
+/* ── Name cell — now a <button>, styled to look like a cell ── */
 .nameCell {
     display: flex !important;
     align-items: center;
     gap: 0.65rem;
     font-weight: 600 !important;
     color: #18181b;
+    /* Reset button defaults */
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+}
+
+.nameCell:focus-visible {
+    outline: 2px solid rgba(79, 70, 229, 0.4);
+    outline-offset: 2px;
+    border-radius: 4px;
 }
 
 .nameAvatar {
@@ -316,6 +325,10 @@
     justify-content: center;
     padding: 1rem;
     animation: fadeOverlay 0.16s ease;
+    /* iOS Safari: without cursor:pointer, fixed divs silently eat all touch events */
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 @keyframes fadeOverlay {
@@ -333,6 +346,8 @@
     max-height: 90vh;
     overflow-y: auto;
     animation: slideUp 0.2s ease;
+    /* Reset cursor inherited from overlay */
+    cursor: default;
 }
 
 /* Smaller variant for checkin modal */

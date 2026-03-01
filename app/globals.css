@@ -76,7 +76,7 @@ form label {
   white-space: nowrap;
 }
 
-.table-wrapper tbody tr::after {
+/* .table-wrapper tbody tr::after {
   content: '';
   position: absolute;
   top: 0;
@@ -86,7 +86,7 @@ form label {
   z-index: -1;
   transition: all .2s ease-in-out;
   border-radius: .5em;
-}
+} */
 
 .table-wrapper tbody tr {
   position: relative;

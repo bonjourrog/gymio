@@ -129,6 +129,15 @@ function WeeklyHeatmap({ customerId }: { customerId: string }) {
     )
 }
 
+// iOS Safari fix: onClick on fixed divs doesn't fire without cursor:pointer.
+// Also handle onTouchEnd to make overlay-close reliable on touch devices.
+function overlayClose(onClose: () => void) {
+    return {
+        onClick:    (e: React.MouseEvent)    => { if (e.target === e.currentTarget) onClose() },
+        onTouchEnd: (e: React.TouchEvent)    => { if (e.target === e.currentTarget) onClose() },
+    }
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Check-in modal
 // ─────────────────────────────────────────────────────────────────────────────
@@ -147,7 +156,7 @@ function CheckinModal({ customer, onClose }: { customer: any; onClose: () => voi
     }
 
     return (
-        <div className={styles.modalOverlay} onClick={(e) => e.target === e.currentTarget && onClose()}>
+        <div className={styles.modalOverlay} {...overlayClose(onClose)}>
             <div className={`${styles.modal} ${styles.checkinModalSize}`} role="dialog" aria-modal="true">
 
                 {/* Header */}
@@ -215,7 +224,7 @@ function MemberModal({ customer, onClose }: { customer: any; onClose: () => void
     const daysThisWeek = checked ? 1 : 0
 
     return (
-        <div className={styles.modalOverlay} onClick={(e) => e.target === e.currentTarget && onClose()}>
+        <div className={styles.modalOverlay} {...overlayClose(onClose)}>
             <div className={styles.modal} role="dialog" aria-modal="true">
 
                 <div className={styles.modalHeader}>
@@ -376,17 +385,19 @@ export default function MembershipTable({ getMembershipColor }: {
                                 </td>
                             </tr>
                         ) : paginated.map(c => (
-                            <tr
-                                key={c.id}
-                                className={styles.tableRow}
-                                onClick={() => setDetail(c)}
-                                role="button"
-                                tabIndex={0}
-                                onKeyDown={(e) => e.key === 'Enter' && setDetail(c)}
-                            >
-                                <th scope="row" className={styles.nameCell}>
-                                    <span className={styles.nameAvatar}>{c.name?.charAt(0).toUpperCase()}</span>
-                                    {c.name}
+                            // No onClick on <tr> — iOS Safari fires click on <tr> unpredictably.
+                            // All interactivity is handled by native <button> elements inside cells.
+                            <tr key={c.id} className={styles.tableRow}>
+                                <th scope="row">
+                                    {/* Real <button> covers the name cell — safe for iOS Safari */}
+                                    <button
+                                        className={styles.nameCell}
+                                        onClick={() => setDetail(c)}
+                                        aria-label={`Ver detalles de ${c.name}`}
+                                    >
+                                        <span className={styles.nameAvatar}>{c.name?.charAt(0).toUpperCase()}</span>
+                                        {c.name}
+                                    </button>
                                 </th>
                                 <td>
                                     <span className={styles.phoneCell}>
@@ -398,8 +409,7 @@ export default function MembershipTable({ getMembershipColor }: {
                                 <td className={styles.planCell}>{c.membership_customers?.[0]?.memberships?.packages?.name}</td>
                                 <td className={styles.priceCell}>{handlePriceFormat(`${c.membership_customers?.[0]?.memberships?.packages?.price}`)}</td>
                                 <td><AttendanceChip customerId={c.id!} /></td>
-                                {/* Check-in button — stopPropagation so it doesn't open the detail modal */}
-                                <td onClick={(e) => e.stopPropagation()}>
+                                <td>
                                     <button
                                         className={styles.checkinRowBtn}
                                         onClick={() => setCheckin(c)}
